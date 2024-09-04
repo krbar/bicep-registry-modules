@@ -121,21 +121,15 @@ module digitalTwinsInstance_eventHubEndpoints 'endpoint--event-hub/main.bicep' =
     name: '${uniqueString(deployment().name, location)}-DigitalTwinsInstance-Endpoints-EventHub-${index}'
     params: {
       digitalTwinInstanceName: digitalTwinsInstance.name
-      name: contains(eventHubEndpoint, 'name') ? eventHubEndpoint.name : 'EventHubEndpoint'
-      authenticationType: contains(eventHubEndpoint, 'authenticationType')
-        ? eventHubEndpoint.authenticationType
-        : 'KeyBased'
-      connectionStringPrimaryKey: contains(eventHubEndpoint, 'connectionStringPrimaryKey')
-        ? eventHubEndpoint.connectionStringPrimaryKey
-        : ''
-      connectionStringSecondaryKey: contains(eventHubEndpoint, 'connectionStringSecondaryKey')
-        ? eventHubEndpoint.connectionStringSecondaryKey
-        : ''
-      deadLetterSecret: contains(eventHubEndpoint, 'deadLetterSecret') ? eventHubEndpoint.deadLetterSecret : ''
-      deadLetterUri: contains(eventHubEndpoint, 'deadLetterUri') ? eventHubEndpoint.deadLetterUri : ''
-      endpointUri: contains(eventHubEndpoint, 'endpointUri') ? eventHubEndpoint.endpointUri : ''
-      entityPath: contains(eventHubEndpoint, 'entityPath') ? eventHubEndpoint.entityPath : ''
-      managedIdentities: contains(eventHubEndpoint, 'managedIdentities') ? eventHubEndpoint.managedIdentities : {}
+      name: eventHubEndpoint.?name ?? 'EventHubEndpoint'
+      authenticationType: eventHubEndpoint.?authenticationType ?? 'KeyBased'
+      connectionStringPrimaryKey: eventHubEndpoint.?connectionStringPrimaryKey ?? ''
+      connectionStringSecondaryKey: eventHubEndpoint.?connectionStringSecondaryKey ?? ''
+      deadLetterSecret: eventHubEndpoint.?deadLetterSecret ?? ''
+      deadLetterUri: eventHubEndpoint.?deadLetterUri ?? ''
+      endpointUri: eventHubEndpoint.?endpointUri ?? ''
+      entityPath: eventHubEndpoint.?entityPath ?? ''
+      managedIdentities: eventHubEndpoint.?managedIdentities ?? {}
     }
   }
 ]
@@ -145,13 +139,11 @@ module digitalTwinsInstance_eventGridEndpoints 'endpoint--event-grid/main.bicep'
     name: '${uniqueString(deployment().name, location)}-DigitalTwinsInstance-Endpoints-EventGrid-${index}'
     params: {
       digitalTwinInstanceName: digitalTwinsInstance.name
-      name: contains(eventGridEndpoint, 'name') ? eventGridEndpoint.name : 'EventGridEndpoint'
-      topicEndpoint: contains(eventGridEndpoint, 'topicEndpoint') ? eventGridEndpoint.topicEndpoint : ''
-      deadLetterSecret: contains(eventGridEndpoint, 'deadLetterSecret') ? eventGridEndpoint.deadLetterSecret : ''
-      deadLetterUri: contains(eventGridEndpoint, 'deadLetterUri') ? eventGridEndpoint.deadLetterUri : ''
-      eventGridDomainResourceId: contains(eventGridEndpoint, 'eventGridDomainId')
-        ? eventGridEndpoint.eventGridDomainId
-        : ''
+      name: eventGridEndpoint.?name ?? 'EventGridEndpoint'
+      topicEndpoint: eventGridEndpoint.?topicEndpoint ?? ''
+      deadLetterSecret: eventGridEndpoint.?deadLetterSecret ?? ''
+      deadLetterUri: eventGridEndpoint.?deadLetterUri ?? ''
+      eventGridDomainResourceId: eventGridEndpoint.?eventGridDomainId ?? ''
     }
   }
 ]
@@ -161,21 +153,15 @@ module digitalTwinsInstance_serviceBusEndpoints 'endpoint--service-bus/main.bice
     name: '${uniqueString(deployment().name, location)}-DigitalTwinsInstance-Endpoints-ServiceBus-${index}'
     params: {
       digitalTwinInstanceName: digitalTwinsInstance.name
-      name: contains(serviceBusEndpoint, 'name') ? serviceBusEndpoint.name : 'ServiceBusEndpoint'
-      authenticationType: contains(serviceBusEndpoint, 'authenticationType')
-        ? serviceBusEndpoint.authenticationType
-        : ''
-      deadLetterSecret: contains(serviceBusEndpoint, 'deadLetterSecret') ? serviceBusEndpoint.deadLetterSecret : ''
-      deadLetterUri: contains(serviceBusEndpoint, 'deadLetterUri') ? serviceBusEndpoint.deadLetterUri : ''
-      endpointUri: contains(serviceBusEndpoint, 'endpointUri') ? serviceBusEndpoint.endpointUri : ''
-      entityPath: contains(serviceBusEndpoint, 'entityPath') ? serviceBusEndpoint.entityPath : ''
-      primaryConnectionString: contains(serviceBusEndpoint, 'primaryConnectionString')
-        ? serviceBusEndpoint.primaryConnectionString
-        : ''
-      secondaryConnectionString: contains(serviceBusEndpoint, 'secondaryConnectionString')
-        ? serviceBusEndpoint.secondaryConnectionString
-        : ''
-      managedIdentities: contains(serviceBusEndpoint, 'managedIdentities') ? serviceBusEndpoint.managedIdentities : {}
+      name: serviceBusEndpoint.?name ?? 'ServiceBusEndpoint'
+      authenticationType: serviceBusEndpoint.?authenticationType ?? ''
+      deadLetterSecret: serviceBusEndpoint.?deadLetterSecret ?? ''
+      deadLetterUri: serviceBusEndpoint.?deadLetterUri ?? ''
+      endpointUri: serviceBusEndpoint.?endpointUri ?? ''
+      entityPath: serviceBusEndpoint.?entityPath ?? ''
+      primaryConnectionString: serviceBusEndpoint.?primaryConnectionString ?? ''
+      secondaryConnectionString: serviceBusEndpoint.?secondaryConnectionString ?? ''
+      managedIdentities: serviceBusEndpoint.?managedIdentities ?? {}
     }
   }
 ]
