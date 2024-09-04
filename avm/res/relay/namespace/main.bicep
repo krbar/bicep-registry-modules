@@ -127,7 +127,7 @@ module namespace_authorizationRules 'authorization-rule/main.bicep' = [
     params: {
       namespaceName: namespace.name
       name: authorizationRule.name
-      rights: contains(authorizationRule, 'rights') ? authorizationRule.rights : []
+      rights: authorizationRule.?rights ?? []
     }
   }
 ]
@@ -136,11 +136,11 @@ module namespace_networkRuleSet 'network-rule-set/main.bicep' = if (!empty(netwo
   name: '${uniqueString(deployment().name, location)}-NetworkRuleSet'
   params: {
     namespaceName: namespace.name
-    publicNetworkAccess: contains(networkRuleSets, 'publicNetworkAccess')
-      ? networkRuleSets.publicNetworkAccess
-      : (!empty(privateEndpoints) && empty(networkRuleSets) ? 'Disabled' : 'Enabled')
-    defaultAction: contains(networkRuleSets, 'defaultAction') ? networkRuleSets.defaultAction : 'Allow'
-    ipRules: contains(networkRuleSets, 'ipRules') ? networkRuleSets.ipRules : []
+    publicNetworkAccess: networkRuleSets.?publicNetworkAccess ?? (!empty(privateEndpoints) && empty(networkRuleSets)
+      ? 'Disabled'
+      : 'Enabled')
+    defaultAction: networkRuleSets.?defaultAction ?? 'Allow'
+    ipRules: networkRuleSets.?ipRules ?? []
   }
 }
 
@@ -150,33 +150,29 @@ module namespace_hybridConnections 'hybrid-connection/main.bicep' = [
     params: {
       namespaceName: namespace.name
       name: hybridConnection.name
-      authorizationRules: contains(hybridConnection, 'authorizationRules')
-        ? hybridConnection.authorizationRules
-        : [
-            {
-              name: 'RootManageSharedAccessKey'
-              rights: [
-                'Listen'
-                'Manage'
-                'Send'
-              ]
-            }
-            {
-              name: 'defaultListener'
-              rights: [
-                'Listen'
-              ]
-            }
-            {
-              name: 'defaultSender'
-              rights: [
-                'Send'
-              ]
-            }
+      authorizationRules: hybridConnection.?authorizationRules ?? [
+        {
+          name: 'RootManageSharedAccessKey'
+          rights: [
+            'Listen'
+            'Manage'
+            'Send'
           ]
-      requiresClientAuthorization: contains(hybridConnection, 'requiresClientAuthorization')
-        ? hybridConnection.requiresClientAuthorization
-        : true
+        }
+        {
+          name: 'defaultListener'
+          rights: [
+            'Listen'
+          ]
+        }
+        {
+          name: 'defaultSender'
+          rights: [
+            'Send'
+          ]
+        }
+      ]
+      requiresClientAuthorization: hybridConnection.?requiresClientAuthorization ?? true
       userMetadata: hybridConnection.userMetadata
     }
   }
@@ -188,38 +184,32 @@ module namespace_wcfRelays 'wcf-relay/main.bicep' = [
     params: {
       namespaceName: namespace.name
       name: wcfRelay.name
-      authorizationRules: contains(wcfRelay, 'authorizationRules')
-        ? wcfRelay.authorizationRules
-        : [
-            {
-              name: 'RootManageSharedAccessKey'
-              rights: [
-                'Listen'
-                'Manage'
-                'Send'
-              ]
-            }
-            {
-              name: 'defaultListener'
-              rights: [
-                'Listen'
-              ]
-            }
-            {
-              name: 'defaultSender'
-              rights: [
-                'Send'
-              ]
-            }
+      authorizationRules: wcfRelay.?authorizationRules ?? [
+        {
+          name: 'RootManageSharedAccessKey'
+          rights: [
+            'Listen'
+            'Manage'
+            'Send'
           ]
+        }
+        {
+          name: 'defaultListener'
+          rights: [
+            'Listen'
+          ]
+        }
+        {
+          name: 'defaultSender'
+          rights: [
+            'Send'
+          ]
+        }
+      ]
       relayType: wcfRelay.relayType
-      requiresClientAuthorization: contains(wcfRelay, 'requiresClientAuthorization')
-        ? wcfRelay.requiresClientAuthorization
-        : true
-      requiresTransportSecurity: contains(wcfRelay, 'requiresTransportSecurity')
-        ? wcfRelay.requiresTransportSecurity
-        : true
-      userMetadata: contains(wcfRelay, 'userMetadata') ? wcfRelay.userMetadata : null
+      requiresClientAuthorization: wcfRelay.?requiresClientAuthorization ?? true
+      requiresTransportSecurity: wcfRelay.?requiresTransportSecurity ?? true
+      userMetadata: wcfRelay.?userMetadata ?? null
     }
   }
 ]

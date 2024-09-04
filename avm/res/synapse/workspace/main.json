@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.29.47.4906",
-      "templateHash": "12241893102141299283"
+      "templateHash": "4925735493453866191"
     },
     "name": "Synapse Workspaces",
     "description": "This module deploys a Synapse Workspace.",
@@ -894,7 +894,9 @@
           "type": {
             "value": "[parameters('integrationRuntimes')[copyIndex()].type]"
           },
-          "typeProperties": "[if(contains(parameters('integrationRuntimes')[copyIndex()], 'typeProperties'), createObject('value', parameters('integrationRuntimes')[copyIndex()].typeProperties), createObject('value', createObject()))]"
+          "typeProperties": {
+            "value": "[coalesce(tryGet(parameters('integrationRuntimes')[copyIndex()], 'typeProperties'), createObject())]"
+          }
         },
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",

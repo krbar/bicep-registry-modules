@@ -253,7 +253,7 @@ module synapse_integrationRuntimes 'integration-runtime/main.bicep' = [
       workspaceName: workspace.name
       name: integrationRuntime.name
       type: integrationRuntime.type
-      typeProperties: contains(integrationRuntime, 'typeProperties') ? integrationRuntime.typeProperties : {}
+      typeProperties: integrationRuntime.?typeProperties ?? {}
     }
   }
 ]
