@@ -129,3 +129,25 @@ output name string = dashboard.name
 
 @description('The location the dashboard was deployed into.')
 output location string = dashboard.location
+
+// ================ //
+// Definitions      //
+// ================ //
+
+@export()
+type DashboardLensType = {
+  @description('Required. The lens order.')
+  order: int
+  @description('Optional. The dashboard lens\' metadata.')
+  metadata: object?
+  @description('Required. The dashboard parts.')
+  parts: {
+    @description('Required.The dashboard\'s part position.')
+    position: int
+    @description('Optional. The dashboard part\'s metadata.')
+    metadata: {
+      @description('Optional. The dashboard part\'s title.')
+      title: string
+    }?
+  }[]
+}
