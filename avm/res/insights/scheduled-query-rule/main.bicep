@@ -138,7 +138,7 @@ resource queryRule 'Microsoft.Insights/scheduledQueryRules@2023-03-15-preview' =
     evaluationFrequency: (kind == 'LogAlert' && !empty(evaluationFrequency)) ? evaluationFrequency : null
     muteActionsDuration: (kind == 'LogAlert' && !empty(suppressForMinutes)) ? suppressForMinutes : null
     overrideQueryTimeRange: (kind == 'LogAlert' && !empty(queryTimeRange)) ? queryTimeRange : null
-    ruleResolveConfiguration: (kind == 'LogAlert' && !empty(ruleResolveConfiguration)) ? ruleResolveConfiguration : null
+    resolveConfiguration: (kind == 'LogAlert' && !empty(ruleResolveConfiguration)) ? ruleResolveConfiguration : null
     scopes: scopes
     severity: (kind == 'LogAlert') ? severity : null
     skipQueryValidation: (kind == 'LogAlert') ? skipQueryValidation : null
