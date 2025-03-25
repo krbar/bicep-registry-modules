@@ -272,9 +272,19 @@ runs:
           # Fetch & add custom secrets, if any
           # -----------------------------------
           $keyVaultName = "${{ env.CI_KEY_VAULT_NAME }}"
+          Write-Verbose ('[krbar-debug] CI_KEY_VAULT_NAME: {0}' -f $keyVaultName) -Verbose
           if(-not [String]::IsNullOrEmpty($keyVaultName)) {
             # Note: This action requires at least 'Key Vault Secrets User' permissions
+
+            # checking if key vault can be accessed
+            $keyVault = Get-AzKeyVault -VaultName $keyVaultName -ErrorAction SilentlyContinue
+            if($null -eq $keyVault) {
+              Write-Error ('[krbar-debug] Key vault [{0}] not found or access denied' -f $keyVaultName)
+            }
+
             $customKeyVaultSecrets = Get-AzKeyVaultSecret -VaultName $keyVaultName | Where-Object { $_.Name -match '^CI-.+' }
+
+            Write-Verbose ('[krbar-debug] Number of custom secrets: {0}' -f $customKeyVaultSecrets.Count) -Verbose
 
             foreach($customSecret in $customKeyVaultSecrets) {
               $formattedName = $customSecret.Name -replace '^CI-' # e.g. 'CI-mySecret' -> 'mySecret'
