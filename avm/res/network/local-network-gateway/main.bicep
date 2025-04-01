@@ -11,7 +11,7 @@ param location string = resourceGroup().location
 @description('Required. List of the local (on-premises) IP address ranges.')
 param localAddressPrefixes array
 
-@description('Required. Public IP of the local gateway.')
+@description('Required. Public IP address of the local gateway.')
 param localGatewayPublicIpAddress string
 
 import { lockType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'

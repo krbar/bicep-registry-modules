@@ -400,7 +400,7 @@ param tags = {
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
 | [`localAddressPrefixes`](#parameter-localaddressprefixes) | array | List of the local (on-premises) IP address ranges. |
-| [`localGatewayPublicIpAddress`](#parameter-localgatewaypublicipaddress) | string | Public IP of the local gateway. |
+| [`localGatewayPublicIpAddress`](#parameter-localgatewaypublicipaddress) | string | Public IP address of the local gateway. |
 | [`name`](#parameter-name) | string | Name of the Local Network Gateway. |
 
 **Optional parameters**
@@ -424,7 +424,7 @@ List of the local (on-premises) IP address ranges.
 
 ### Parameter: `localGatewayPublicIpAddress`
 
-Public IP of the local gateway.
+Public IP address of the local gateway.
 
 - Required: Yes
 - Type: string
@@ -471,8 +471,6 @@ The BGP peering address and BGP identifier of this BGP speaker.
 
 - Required: Yes
 - Type: string
-- MinValue: 0
-- MaxValue: 4294967295
 
 ### Parameter: `bgpSettings.peerWeight`
 
@@ -480,8 +478,6 @@ The weight added to routes learned from this BGP speaker.
 
 - Required: No
 - Type: int
-- MinValue: 0
-- MaxValue: 4294967295
 
 ### Parameter: `enableTelemetry`
 
