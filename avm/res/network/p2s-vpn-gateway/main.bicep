@@ -11,7 +11,7 @@ param location string = resourceGroup().location
   'noneRouteTable'
   'defaultRouteTable'
 ])
-@description('Conditional. The name of the associated route table. Required if deploying in a Secure Virtual Hub; cannot be a custom route table.')
+@description('Conditional. The name of the associated route table. Required if deploying in a Secure Virtual Hub, cannot be a custom route table.')
 param associatedRouteTableName string?
 
 @description('Optional. The names of the route tables to propagate to the P2S VPN Gateway.')

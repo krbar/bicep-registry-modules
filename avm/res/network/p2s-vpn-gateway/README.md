@@ -400,7 +400,7 @@ param vpnServerConfigurationResourceId = '<vpnServerConfigurationResourceId>'
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`associatedRouteTableName`](#parameter-associatedroutetablename) | string | The name of the associated route table. Required if deploying in a Secure Virtual Hub; cannot be a custom route table. |
+| [`associatedRouteTableName`](#parameter-associatedroutetablename) | string | The name of the associated route table. Required if deploying in a Secure Virtual Hub, cannot be a custom route table. |
 
 **Optional parameters**
 
@@ -439,7 +439,7 @@ The resource ID of the gateways virtual hub.
 
 ### Parameter: `associatedRouteTableName`
 
-The name of the associated route table. Required if deploying in a Secure Virtual Hub; cannot be a custom route table.
+The name of the associated route table. Required if deploying in a Secure Virtual Hub, cannot be a custom route table.
 
 - Required: No
 - Type: string

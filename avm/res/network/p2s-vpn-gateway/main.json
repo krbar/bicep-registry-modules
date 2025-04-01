@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.34.44.8038",
-      "templateHash": "11814997155463454209"
+      "templateHash": "10302083917959101707"
     },
     "name": "P2S VPN Gateway",
     "description": "This module deploys a Virtual Hub P2S Gateway."
@@ -126,7 +126,7 @@
         "defaultRouteTable"
       ],
       "metadata": {
-        "description": "Conditional. The name of the associated route table. Required if deploying in a Secure Virtual Hub; cannot be a custom route table."
+        "description": "Conditional. The name of the associated route table. Required if deploying in a Secure Virtual Hub, cannot be a custom route table."
       }
     },
     "propagatedRouteTableNames": {
