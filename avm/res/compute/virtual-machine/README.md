@@ -28,7 +28,7 @@ This module deploys a Virtual Machine with one or multiple NICs and optionally o
 | `Microsoft.Insights/diagnosticSettings` | [2021-05-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Insights/2021-05-01-preview/diagnosticSettings) |
 | `Microsoft.Maintenance/configurationAssignments` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Maintenance/2023-04-01/configurationAssignments) |
 | `Microsoft.Network/networkInterfaces` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/networkInterfaces) |
-| `Microsoft.Network/publicIPAddresses` | [2023-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-09-01/publicIPAddresses) |
+| `Microsoft.Network/publicIPAddresses` | [2024-05-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2024-05-01/publicIPAddresses) |
 | `Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2023-01-01/vaults/backupFabrics/protectionContainers/protectedItems) |
 
 ## Usage examples
@@ -529,6 +529,11 @@ module virtualMachine 'br/public:avm/res/compute/virtual-machine:<version>' = {
             ]
             name: 'ipconfig01'
             pipConfiguration: {
+              diagnosticSettings: [
+                {
+                  workspaceResourceId: '<workspaceResourceId>'
+                }
+              ]
               publicIpNameSuffix: '-pip-01'
               roleAssignments: [
                 {
@@ -823,6 +828,11 @@ module virtualMachine 'br/public:avm/res/compute/virtual-machine:<version>' = {
               ],
               "name": "ipconfig01",
               "pipConfiguration": {
+                "diagnosticSettings": [
+                  {
+                    "workspaceResourceId": "<workspaceResourceId>"
+                  }
+                ],
                 "publicIpNameSuffix": "-pip-01",
                 "roleAssignments": [
                   {
@@ -1165,6 +1175,11 @@ param nicConfigurations = [
         ]
         name: 'ipconfig01'
         pipConfiguration: {
+          diagnosticSettings: [
+            {
+              workspaceResourceId: '<workspaceResourceId>'
+            }
+          ]
           publicIpNameSuffix: '-pip-01'
           roleAssignments: [
             {
@@ -3041,6 +3056,11 @@ module virtualMachine 'br/public:avm/res/compute/virtual-machine:<version>' = {
             ]
             name: 'ipconfig01'
             pipConfiguration: {
+              diagnosticSettings: [
+                {
+                  workspaceResourceId: '<workspaceResourceId>'
+                }
+              ]
               publicIPAddressResourceId: '<publicIPAddressResourceId>'
               roleAssignments: [
                 {
@@ -3360,6 +3380,11 @@ module virtualMachine 'br/public:avm/res/compute/virtual-machine:<version>' = {
               ],
               "name": "ipconfig01",
               "pipConfiguration": {
+                "diagnosticSettings": [
+                  {
+                    "workspaceResourceId": "<workspaceResourceId>"
+                  }
+                ],
                 "publicIPAddressResourceId": "<publicIPAddressResourceId>",
                 "roleAssignments": [
                   {
@@ -3731,6 +3756,11 @@ param nicConfigurations = [
         ]
         name: 'ipconfig01'
         pipConfiguration: {
+          diagnosticSettings: [
+            {
+              workspaceResourceId: '<workspaceResourceId>'
+            }
+          ]
           publicIPAddressResourceId: '<publicIPAddressResourceId>'
           roleAssignments: [
             {
@@ -6172,8 +6202,8 @@ This section gives you an overview of all local-referenced module files (i.e., o
 
 | Reference | Type |
 | :-- | :-- |
-| `br/public:avm/res/network/network-interface:0.4.0` | Remote reference |
-| `br/public:avm/res/network/public-ip-address:0.6.0` | Remote reference |
+| `br/public:avm/res/network/network-interface:0.4.1` | Remote reference |
+| `br/public:avm/res/network/public-ip-address:0.8.0` | Remote reference |
 | `br/public:avm/utl/types/avm-common-types:0.5.1` | Remote reference |
 
 ## Notes
