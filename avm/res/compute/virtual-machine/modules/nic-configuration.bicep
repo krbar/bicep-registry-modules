@@ -30,7 +30,7 @@ import { roleAssignmentType } from 'br/public:avm/utl/types/avm-common-types:0.5
 @description('Optional. Array of role assignments to create.')
 param roleAssignments roleAssignmentType[]?
 
-module networkInterface_publicIPAddresses 'br/public:avm/res/network/public-ip-address:0.6.0' = [
+module networkInterface_publicIPAddresses 'br/public:avm/res/network/public-ip-address:0.8.0' = [
   for (ipConfiguration, index) in ipConfigurations: if (contains(ipConfiguration, 'pipConfiguration') && !contains(
     ipConfiguration.pipConfiguration,
     'publicIPAddressResourceId'
@@ -38,7 +38,7 @@ module networkInterface_publicIPAddresses 'br/public:avm/res/network/public-ip-a
     name: '${deployment().name}-publicIP-${index}'
     params: {
       name: ipConfiguration.pipConfiguration.?name ?? '${virtualMachineName}${ipConfiguration.pipConfiguration.?publicIpNameSuffix}'
-      diagnosticSettings: ipConfiguration.?diagnosticSettings
+      diagnosticSettings: ipConfiguration.pipConfiguration.?diagnosticSettings ?? ipConfiguration.?diagnosticSettings
       location: location
       lock: lock
       idleTimeoutInMinutes: ipConfiguration.pipConfiguration.?idleTimeoutInMinutes
@@ -61,7 +61,7 @@ module networkInterface_publicIPAddresses 'br/public:avm/res/network/public-ip-a
   }
 ]
 
-module networkInterface 'br/public:avm/res/network/network-interface:0.4.0' = {
+module networkInterface 'br/public:avm/res/network/network-interface:0.4.1' = {
   name: '${deployment().name}-NetworkInterface'
   params: {
     name: networkInterfaceName

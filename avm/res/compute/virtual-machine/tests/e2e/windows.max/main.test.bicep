@@ -134,6 +134,11 @@ module testDeployment '../../../main.bicep' = [
                     principalType: 'ServicePrincipal'
                   }
                 ]
+                diagnosticSettings: [
+                  {
+                    workspaceResourceId: diagnosticDependencies.outputs.logAnalyticsWorkspaceResourceId
+                  }
+                ]
               }
               subnetResourceId: nestedDependencies.outputs.subnetResourceId
               diagnosticSettings: [
