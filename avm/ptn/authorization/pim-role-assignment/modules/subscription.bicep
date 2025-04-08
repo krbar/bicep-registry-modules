@@ -177,7 +177,7 @@ type ticketInfoType = {
 
   @sys.description('Optional. The ticket system name for the role eligibility assignment.')
   ticketSystem: string?
-}?
+}
 
 @export()
 @discriminator('roleAssignmentType')
