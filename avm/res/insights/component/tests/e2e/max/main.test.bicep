@@ -59,63 +59,104 @@ module diagnosticDependencies '../../../../../../../utilities/e2e-template-asset
 // Test Execution //
 // ============== //
 
-module testDeployment '../../../main.bicep' = {
+// module testDeployment '../../../main.bicep' = {
+//   scope: resourceGroup
+//   name: '${uniqueString(deployment().name, resourceLocation)}-test-${serviceShort}'
+//   params: {
+//     name: '${namePrefix}${serviceShort}001'
+//     location: resourceLocation
+//     disableIpMasking: false
+//     disableLocalAuth: true
+//     forceCustomerStorageForProfiler: true
+//     linkedStorageAccountResourceId: nestedDependencies.outputs.storageAccountResourceId
+//     workspaceResourceId: diagnosticDependencies.outputs.logAnalyticsWorkspaceResourceId
+//     flowType: 'Redfield'
+//     requestSource: 'Azure'
+//     diagnosticSettings: [
+//       {
+//         name: 'customSetting'
+//         metricCategories: [
+//           {
+//             category: 'AllMetrics'
+//           }
+//         ]
+//         eventHubName: diagnosticDependencies.outputs.eventHubNamespaceEventHubName
+//         eventHubAuthorizationRuleResourceId: diagnosticDependencies.outputs.eventHubAuthorizationRuleId
+//         storageAccountResourceId: diagnosticDependencies.outputs.storageAccountResourceId
+//         workspaceResourceId: diagnosticDependencies.outputs.logAnalyticsWorkspaceResourceId
+//       }
+//     ]
+//     lock: {
+//       kind: 'CanNotDelete'
+//       name: 'myCustomLockName'
+//     }
+//     roleAssignments: [
+//       {
+//         name: '8aacced3-3fce-41bc-a416-959df1acec57'
+//         roleDefinitionIdOrName: 'Owner'
+//         principalId: nestedDependencies.outputs.managedIdentityPrincipalId
+//         principalType: 'ServicePrincipal'
+//       }
+//       {
+//         name: guid('Custom seed ${namePrefix}${serviceShort}')
+//         roleDefinitionIdOrName: 'b24988ac-6180-42a0-ab88-20f7382dd24c'
+//         principalId: nestedDependencies.outputs.managedIdentityPrincipalId
+//         principalType: 'ServicePrincipal'
+//       }
+//       {
+//         roleDefinitionIdOrName: subscriptionResourceId(
+//           'Microsoft.Authorization/roleDefinitions',
+//           'acdd72a7-3385-48ef-bd42-f606fba81ae7'
+//         )
+//         principalId: nestedDependencies.outputs.managedIdentityPrincipalId
+//         principalType: 'ServicePrincipal'
+//       }
+//     ]
+//     tags: {
+//       'hidden-title': 'This is visible in the resource name'
+//       Environment: 'Non-Prod'
+//       Role: 'DeploymentValidation'
+//     }
+//   }
+// }
+
+module appi 'br/public:avm/res/insights/component:0.4.0' = {
   scope: resourceGroup
   name: '${uniqueString(deployment().name, resourceLocation)}-test-${serviceShort}'
   params: {
     name: '${namePrefix}${serviceShort}001'
     location: resourceLocation
-    disableIpMasking: false
-    disableLocalAuth: true
-    forceCustomerStorageForProfiler: true
-    linkedStorageAccountResourceId: nestedDependencies.outputs.storageAccountResourceId
     workspaceResourceId: diagnosticDependencies.outputs.logAnalyticsWorkspaceResourceId
-    flowType: 'Redfield'
-    requestSource: 'Azure'
+    tags: {
+      Environment: 'Non-Prod'
+      Role: 'DeploymentValidation'
+    }
     diagnosticSettings: [
       {
-        name: 'customSetting'
         metricCategories: [
           {
             category: 'AllMetrics'
           }
         ]
-        eventHubName: diagnosticDependencies.outputs.eventHubNamespaceEventHubName
-        eventHubAuthorizationRuleResourceId: diagnosticDependencies.outputs.eventHubAuthorizationRuleId
-        storageAccountResourceId: diagnosticDependencies.outputs.storageAccountResourceId
+        logCategoriesAndGroups: [
+          {
+            categoryGroup: 'allLogs'
+          }
+        ]
+        name: 'customSetting'
         workspaceResourceId: diagnosticDependencies.outputs.logAnalyticsWorkspaceResourceId
       }
-    ]
-    lock: {
-      kind: 'CanNotDelete'
-      name: 'myCustomLockName'
-    }
-    roleAssignments: [
       {
-        name: '8aacced3-3fce-41bc-a416-959df1acec57'
-        roleDefinitionIdOrName: 'Owner'
-        principalId: nestedDependencies.outputs.managedIdentityPrincipalId
-        principalType: 'ServicePrincipal'
-      }
-      {
-        name: guid('Custom seed ${namePrefix}${serviceShort}')
-        roleDefinitionIdOrName: 'b24988ac-6180-42a0-ab88-20f7382dd24c'
-        principalId: nestedDependencies.outputs.managedIdentityPrincipalId
-        principalType: 'ServicePrincipal'
-      }
-      {
-        roleDefinitionIdOrName: subscriptionResourceId(
-          'Microsoft.Authorization/roleDefinitions',
-          'acdd72a7-3385-48ef-bd42-f606fba81ae7'
-        )
-        principalId: nestedDependencies.outputs.managedIdentityPrincipalId
-        principalType: 'ServicePrincipal'
+        logCategoriesAndGroups: [
+          {
+            categoryGroup: 'allLogs'
+          }
+        ]
+        metricCategories: []
+        name: 'SIEMIntegration'
+        eventHubName: diagnosticDependencies.outputs.eventHubNamespaceEventHubName
+        eventHubAuthorizationRuleResourceId: diagnosticDependencies.outputs.eventHubAuthorizationRuleId
       }
     ]
-    tags: {
-      'hidden-title': 'This is visible in the resource name'
-      Environment: 'Non-Prod'
-      Role: 'DeploymentValidation'
-    }
   }
 }
