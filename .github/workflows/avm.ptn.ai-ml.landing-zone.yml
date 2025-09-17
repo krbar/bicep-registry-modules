@@ -23,13 +23,16 @@ on:
         description: "Default location overwrite (e.g., eastus)"
         required: false
   push:
-    branches: [ main ]
+    branches:
+      - main
     paths:
       - ".github/actions/templates/avm-**"
       - ".github/workflows/avm.template.module.yml"
       - ".github/workflows/avm.ptn.ai-ml.landing-zone.yml"
       - "avm/ptn/ai-ml/landing-zone/**"
       - "utilities/pipelines/**"
+      - "!utilities/pipelines/platform/**"
+      - "!*/**/child-module-publish-allowed-list.json"
       - "!*/**/README.md"
 
 env:
@@ -40,6 +43,9 @@ concurrency:
   group: ${{ github.workflow }}
 
 jobs:
+  ###########################
+  #   Initialize pipeline   #
+  ###########################
   job_initialize_pipeline:
     runs-on: ubuntu-latest
     name: "Initialize pipeline"
@@ -64,12 +70,16 @@ jobs:
       psRuleModuleTestFilePaths: ${{ steps.get-module-test-file-paths.outputs.psRuleModuleTestFilePaths }}
       modulePath: "${{ env.modulePath }}"
 
+  ##############################
+  #   Call reusable workflow   #
+  ##############################
   call-workflow-passing-data:
     name: "Run"
     permissions:
-      id-token: write
-      contents: write
-    needs: [ job_initialize_pipeline ]
+      id-token: write # For OIDC
+      contents: write # For release tags
+    needs:
+      - job_initialize_pipeline
     uses: ./.github/workflows/avm.template.module.yml
     with:
       workflowInput: "${{ needs.job_initialize_pipeline.outputs.workflowInput }}"
