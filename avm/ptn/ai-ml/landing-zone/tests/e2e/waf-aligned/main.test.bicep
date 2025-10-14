@@ -10,7 +10,7 @@ param resourceGroupName string = 'dep-${namePrefix}-bicep-${serviceShort}-rg'
 import { enforcedLocation } from '../../shared/constants.bicep'
 
 @description('Optional. Short identifier for the test kind. Keep short to avoid name-length issues.')
-param serviceShort string = 'lzdef'
+param serviceShort string = 'ailzwaf'
 
 @description('Optional. A token injected by CI for uniqueness.')
 param namePrefix string = '#_namePrefix_#'
