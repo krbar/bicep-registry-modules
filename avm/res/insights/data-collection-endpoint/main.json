@@ -5,8 +5,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.37.4.10188",
-      "templateHash": "3496169930403221612"
+      "version": "0.39.26.7824",
+      "templateHash": "3029035165810194872"
     },
     "name": "Data Collection Endpoints",
     "description": "This module deploys a Data Collection Endpoint."
@@ -45,7 +45,7 @@
       "metadata": {
         "description": "An AVM-aligned type for a lock.",
         "__bicep_imported_from!": {
-          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.6.0"
+          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.6.1"
         }
       }
     },
@@ -120,7 +120,7 @@
       "metadata": {
         "description": "An AVM-aligned type for a role assignment.",
         "__bicep_imported_from!": {
-          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.3.0"
+          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.6.1"
         }
       }
     }
@@ -243,7 +243,7 @@
     },
     "dataCollectionEndpoint": {
       "type": "Microsoft.Insights/dataCollectionEndpoints",
-      "apiVersion": "2023-03-11",
+      "apiVersion": "2024-03-11",
       "name": "[parameters('name')]",
       "kind": "[parameters('kind')]",
       "location": "[parameters('location')]",
@@ -319,7 +319,7 @@
       "metadata": {
         "description": "The location the resource was deployed into."
       },
-      "value": "[reference('dataCollectionEndpoint', '2023-03-11', 'full').location]"
+      "value": "[reference('dataCollectionEndpoint', '2024-03-11', 'full').location]"
     }
   }
 }
