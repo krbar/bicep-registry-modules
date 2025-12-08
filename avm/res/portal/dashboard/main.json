@@ -5,8 +5,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.38.5.1644",
-      "templateHash": "13484851042060286099"
+      "version": "0.39.26.7824",
+      "templateHash": "13547429865109179790"
     },
     "name": "Portal Dashboards",
     "description": "This module deploys a Portal Dashboard."
@@ -45,7 +45,7 @@
       "metadata": {
         "description": "An AVM-aligned type for a lock.",
         "__bicep_imported_from!": {
-          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.6.0"
+          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.6.1"
         }
       }
     },
@@ -120,7 +120,7 @@
       "metadata": {
         "description": "An AVM-aligned type for a role assignment.",
         "__bicep_imported_from!": {
-          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.5.1"
+          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.6.1"
         }
       }
     }
@@ -150,7 +150,7 @@
       "type": "object",
       "metadata": {
         "__bicep_resource_derived_type!": {
-          "source": "Microsoft.Portal/dashboards@2020-09-01#properties/tags"
+          "source": "Microsoft.Portal/dashboards@2025-04-01-preview#properties/tags"
         },
         "description": "Optional. Tags of the resource."
       },
@@ -230,7 +230,7 @@
     },
     "dashboard": {
       "type": "Microsoft.Portal/dashboards",
-      "apiVersion": "2020-09-01-preview",
+      "apiVersion": "2025-04-01-preview",
       "name": "[parameters('name')]",
       "location": "[parameters('location')]",
       "tags": "[parameters('tags')]",
@@ -303,7 +303,7 @@
       "metadata": {
         "description": "The location the dashboard was deployed into."
       },
-      "value": "[reference('dashboard', '2020-09-01-preview', 'full').location]"
+      "value": "[reference('dashboard', '2025-04-01-preview', 'full').location]"
     }
   }
 }
