@@ -76,7 +76,7 @@ resource avmTelemetry 'Microsoft.Resources/deployments@2024-03-01' = if (enableT
   }
 }
 
-resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
+resource dashboard 'Microsoft.Portal/dashboards@2025-04-01-preview' = {
   name: name
   location: location
   tags: tags
