@@ -11,13 +11,13 @@ param location string = resourceGroup().location
 param enableTelemetry bool = true
 
 @description('Optional. Tags of the resource.')
-param tags resourceInput<'Microsoft.Portal/dashboards@2020-09-01'>.tags?
+param tags resourceInput<'Microsoft.Portal/dashboards@2025-04-01-preview'>.tags?
 
-import { roleAssignmentType } from 'br/public:avm/utl/types/avm-common-types:0.5.1'
+import { roleAssignmentType } from 'br/public:avm/utl/types/avm-common-types:0.6.1'
 @description('Optional. Array of role assignments to create.')
 param roleAssignments roleAssignmentType[]?
 
-import { lockType } from 'br/public:avm/utl/types/avm-common-types:0.6.0'
+import { lockType } from 'br/public:avm/utl/types/avm-common-types:0.6.1'
 @description('Optional. The lock settings of the service.')
 param lock lockType?
 
