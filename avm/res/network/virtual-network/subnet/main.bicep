@@ -11,7 +11,7 @@ param virtualNetworkName string
 param addressPrefix string?
 
 @description('Conditional. The address space for the subnet, deployed from IPAM Pool. Required if `addressPrefixes` and `addressPrefix` is empty.')
-param ipamPoolPrefixAllocations object[]?
+param ipamPoolPrefixAllocations resourceInput<'Microsoft.Network/virtualNetworks/subnets@2025-05-01'>.properties.ipamPoolPrefixAllocations?
 
 @description('Optional. The resource ID of the network security group to assign to the subnet.')
 param networkSecurityGroupResourceId string?
@@ -54,12 +54,18 @@ param defaultOutboundAccess bool?
 param sharingScope ('DelegatedServices' | 'Tenant')?
 
 @description('Optional. Application gateway IP configurations of virtual network resource.')
-param applicationGatewayIPConfigurations array = []
+param applicationGatewayIPConfigurations resourceInput<'Microsoft.Network/virtualNetworks/subnets@2025-05-01'>.properties.applicationGatewayIPConfigurations = []
 
 @description('Optional. An array of service endpoint policies.')
-param serviceEndpointPolicies array = []
+param serviceEndpointPolicies resourceInput<'Microsoft.Network/virtualNetworks/subnets@2025-05-01'>.properties.serviceEndpointPolicies = []
 
-import { roleAssignmentType } from 'br/public:avm/utl/types/avm-common-types:0.2.1'
+@description('Optional. Array of IpAllocation which reference this subnet.')
+param ipAllocations resourceInput<'Microsoft.Network/virtualNetworks/subnets@2025-05-01'>.properties.ipAllocations
+
+@description('Optional. The resource ID of the service gateway associated with the subnet.')
+param serviceGatewayResourceId string?
+
+import { roleAssignmentType } from 'br/public:avm/utl/types/avm-common-types:0.6.1'
 @description('Optional. Array of role assignments to create.')
 param roleAssignments roleAssignmentType[]?
 
@@ -114,11 +120,11 @@ resource avmTelemetry 'Microsoft.Resources/deployments@2024-03-01' = if (enableT
   }
 }
 
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-01-01' existing = {
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2025-05-01' existing = {
   name: virtualNetworkName
 }
 
-resource subnet 'Microsoft.Network/virtualNetworks/subnets@2024-05-01' = {
+resource subnet 'Microsoft.Network/virtualNetworks/subnets@2025-05-01' = {
   name: name
   parent: virtualNetwork
   properties: {
@@ -161,6 +167,12 @@ resource subnet 'Microsoft.Network/virtualNetworks/subnets@2024-05-01' = {
     serviceEndpointPolicies: serviceEndpointPolicies
     defaultOutboundAccess: defaultOutboundAccess
     sharingScope: sharingScope
+    ipAllocations: ipAllocations
+    serviceGateway: !empty(serviceGatewayResourceId)
+      ? {
+          id: serviceGatewayResourceId
+        }
+      : null
   }
 }
 
@@ -193,7 +205,7 @@ output resourceId string = subnet.id
 output addressPrefix string = subnet.properties.?addressPrefix ?? ''
 
 @description('List of address prefixes for the subnet.')
-output addressPrefixes array = subnet.properties.?addressPrefixes ?? []
+output addressPrefixes resourceOutput<'Microsoft.Network/virtualNetworks/subnets@2025-05-01'>.properties.addressPrefixes = subnet.properties.?addressPrefixes ?? []
 
 @description('The IPAM pool prefix allocations for the subnet.')
-output ipamPoolPrefixAllocations array = subnet.properties.?ipamPoolPrefixAllocations ?? []
+output ipamPoolPrefixAllocations resourceOutput<'Microsoft.Network/virtualNetworks/subnets@2025-05-01'>.properties.ipamPoolPrefixAllocations = subnet.properties.?ipamPoolPrefixAllocations ?? []
