@@ -43,8 +43,9 @@ The following section provides usage examples for the module, which were used to
 - [Using IPAM Pool Prefix Allocations](#example-2-using-ipam-pool-prefix-allocations)
 - [Using an IPv6 address space](#example-3-using-an-ipv6-address-space)
 - [Using large parameter set](#example-4-using-large-parameter-set)
-- [Deploying a bi-directional peering](#example-5-deploying-a-bi-directional-peering)
-- [WAF-aligned](#example-6-waf-aligned)
+- [Deploying subnet-level peering](#example-5-deploying-subnet-level-peering)
+- [Deploying a bi-directional peering](#example-6-deploying-a-bi-directional-peering)
+- [WAF-aligned](#example-7-waf-aligned)
 
 ### Example 1: _Using only defaults_
 
@@ -840,7 +841,212 @@ param tags = {
 </details>
 <p>
 
-### Example 5: _Deploying a bi-directional peering_
+### Example 5: _Deploying subnet-level peering_
+
+This instance deploys the module with subnet-level peering, peering only specific subnets between two virtual networks.
+
+You can find the full example and the setup of its dependencies in the deployment test folder path [/tests/e2e/subnetPeering]
+
+
+<details>
+
+<summary>via Bicep module</summary>
+
+```bicep
+module virtualNetwork 'br/public:avm/res/network/virtual-network:<version>' = {
+  params: {
+    // Required parameters
+    addressPrefixes: [
+      '10.1.0.0/16'
+    ]
+    name: 'nvnsubpr001'
+    // Non-required parameters
+    location: '<location>'
+    peerings: [
+      {
+        allowForwardedTraffic: true
+        allowGatewayTransit: false
+        allowVirtualNetworkAccess: true
+        localSubnetNames: [
+          'localSubnet1'
+        ]
+        peerCompleteVnets: false
+        remotePeeringAllowForwardedTraffic: true
+        remotePeeringAllowVirtualNetworkAccess: true
+        remotePeeringEnabled: true
+        remotePeeringLocalSubnetNames: [
+          'remoteSubnet1'
+        ]
+        remotePeeringPeerCompleteVnets: false
+        remotePeeringRemoteSubnetNames: [
+          'localSubnet1'
+        ]
+        remoteSubnetNames: [
+          'remoteSubnet1'
+        ]
+        remoteVirtualNetworkResourceId: '<remoteVirtualNetworkResourceId>'
+        useRemoteGateways: false
+      }
+    ]
+    subnets: [
+      {
+        addressPrefix: '<addressPrefix>'
+        name: 'localSubnet1'
+      }
+      {
+        addressPrefix: '<addressPrefix>'
+        name: 'localSubnet2'
+      }
+    ]
+    tags: {
+      Environment: 'Non-Prod'
+      'hidden-title': 'This is visible in the resource name'
+      Role: 'DeploymentValidation'
+    }
+  }
+}
+```
+
+</details>
+<p>
+
+<details>
+
+<summary>via JSON parameters file</summary>
+
+```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    // Required parameters
+    "addressPrefixes": {
+      "value": [
+        "10.1.0.0/16"
+      ]
+    },
+    "name": {
+      "value": "nvnsubpr001"
+    },
+    // Non-required parameters
+    "location": {
+      "value": "<location>"
+    },
+    "peerings": {
+      "value": [
+        {
+          "allowForwardedTraffic": true,
+          "allowGatewayTransit": false,
+          "allowVirtualNetworkAccess": true,
+          "localSubnetNames": [
+            "localSubnet1"
+          ],
+          "peerCompleteVnets": false,
+          "remotePeeringAllowForwardedTraffic": true,
+          "remotePeeringAllowVirtualNetworkAccess": true,
+          "remotePeeringEnabled": true,
+          "remotePeeringLocalSubnetNames": [
+            "remoteSubnet1"
+          ],
+          "remotePeeringPeerCompleteVnets": false,
+          "remotePeeringRemoteSubnetNames": [
+            "localSubnet1"
+          ],
+          "remoteSubnetNames": [
+            "remoteSubnet1"
+          ],
+          "remoteVirtualNetworkResourceId": "<remoteVirtualNetworkResourceId>",
+          "useRemoteGateways": false
+        }
+      ]
+    },
+    "subnets": {
+      "value": [
+        {
+          "addressPrefix": "<addressPrefix>",
+          "name": "localSubnet1"
+        },
+        {
+          "addressPrefix": "<addressPrefix>",
+          "name": "localSubnet2"
+        }
+      ]
+    },
+    "tags": {
+      "value": {
+        "Environment": "Non-Prod",
+        "hidden-title": "This is visible in the resource name",
+        "Role": "DeploymentValidation"
+      }
+    }
+  }
+}
+```
+
+</details>
+<p>
+
+<details>
+
+<summary>via Bicep parameters file</summary>
+
+```bicep-params
+using 'br/public:avm/res/network/virtual-network:<version>'
+
+// Required parameters
+param addressPrefixes = [
+  '10.1.0.0/16'
+]
+param name = 'nvnsubpr001'
+// Non-required parameters
+param location = '<location>'
+param peerings = [
+  {
+    allowForwardedTraffic: true
+    allowGatewayTransit: false
+    allowVirtualNetworkAccess: true
+    localSubnetNames: [
+      'localSubnet1'
+    ]
+    peerCompleteVnets: false
+    remotePeeringAllowForwardedTraffic: true
+    remotePeeringAllowVirtualNetworkAccess: true
+    remotePeeringEnabled: true
+    remotePeeringLocalSubnetNames: [
+      'remoteSubnet1'
+    ]
+    remotePeeringPeerCompleteVnets: false
+    remotePeeringRemoteSubnetNames: [
+      'localSubnet1'
+    ]
+    remoteSubnetNames: [
+      'remoteSubnet1'
+    ]
+    remoteVirtualNetworkResourceId: '<remoteVirtualNetworkResourceId>'
+    useRemoteGateways: false
+  }
+]
+param subnets = [
+  {
+    addressPrefix: '<addressPrefix>'
+    name: 'localSubnet1'
+  }
+  {
+    addressPrefix: '<addressPrefix>'
+    name: 'localSubnet2'
+  }
+]
+param tags = {
+  Environment: 'Non-Prod'
+  'hidden-title': 'This is visible in the resource name'
+  Role: 'DeploymentValidation'
+}
+```
+
+</details>
+<p>
+
+### Example 6: _Deploying a bi-directional peering_
 
 This instance deploys the module with both an inbound and outbound peering.
 
@@ -1033,7 +1239,7 @@ param tags = {
 </details>
 <p>
 
-### Example 6: _WAF-aligned_
+### Example 7: _WAF-aligned_
 
 This instance deploys the module in alignment with the best-practices of the Well-Architected Framework.
 
