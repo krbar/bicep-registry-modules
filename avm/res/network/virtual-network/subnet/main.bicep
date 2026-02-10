@@ -60,7 +60,7 @@ param applicationGatewayIPConfigurations resourceInput<'Microsoft.Network/virtua
 param serviceEndpointPolicies resourceInput<'Microsoft.Network/virtualNetworks/subnets@2025-05-01'>.properties.serviceEndpointPolicies = []
 
 @description('Optional. Array of IpAllocation which reference this subnet.')
-param ipAllocations resourceInput<'Microsoft.Network/virtualNetworks/subnets@2025-05-01'>.properties.ipAllocations
+param ipAllocations resourceInput<'Microsoft.Network/virtualNetworks/subnets@2025-05-01'>.properties.ipAllocations?
 
 @description('Optional. The resource ID of the service gateway associated with the subnet.')
 param serviceGatewayResourceId string?
