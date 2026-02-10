@@ -132,7 +132,7 @@ Enable/Disable usage telemetry for module.
 
 Array of IpAllocation which reference this subnet.
 
-- Required: Yes
+- Required: No
 - Type: array
 
 ### Parameter: `natGatewayResourceId`

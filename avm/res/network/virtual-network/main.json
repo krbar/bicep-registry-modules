@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.40.2.10011",
-      "templateHash": "15659179404497499919"
+      "templateHash": "10748529946581124742"
     },
     "name": "Virtual Networks",
     "description": "This module deploys a Virtual Network (vNet)."
@@ -1032,7 +1032,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.40.2.10011",
-              "templateHash": "1719671825212455656"
+              "templateHash": "1386681333462010350"
             },
             "name": "Virtual Network Subnets",
             "description": "This module deploys a Virtual Network Subnet."
@@ -1261,7 +1261,8 @@
                   "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/ipAllocations"
                 },
                 "description": "Optional. Array of IpAllocation which reference this subnet."
-              }
+              },
+              "nullable": true
             },
             "serviceGatewayResourceId": {
               "type": "string",

@@ -462,6 +462,7 @@ module virtualNetwork 'br/public:avm/res/network/virtual-network:<version>' = {
       kind: 'CanNotDelete'
       name: 'myCustomLockName'
     }
+    privateEndpointVNetPolicies: 'Disabled'
     roleAssignments: [
       {
         name: 'f5c27a7b-9b18-4dc1-b002-db3c38e80b64'
@@ -608,6 +609,9 @@ module virtualNetwork 'br/public:avm/res/network/virtual-network:<version>' = {
         "name": "myCustomLockName"
       }
     },
+    "privateEndpointVNetPolicies": {
+      "value": "Disabled"
+    },
     "roleAssignments": {
       "value": [
         {
@@ -744,6 +748,7 @@ param lock = {
   kind: 'CanNotDelete'
   name: 'myCustomLockName'
 }
+param privateEndpointVNetPolicies = 'Disabled'
 param roleAssignments = [
   {
     name: 'f5c27a7b-9b18-4dc1-b002-db3c38e80b64'
@@ -861,10 +866,14 @@ module virtualNetwork 'br/public:avm/res/network/virtual-network:<version>' = {
         allowForwardedTraffic: true
         allowGatewayTransit: false
         allowVirtualNetworkAccess: true
+        enableOnlyIPv6Peering: false
+        peerCompleteVnets: true
         remotePeeringAllowForwardedTraffic: true
         remotePeeringAllowVirtualNetworkAccess: true
         remotePeeringEnabled: true
+        remotePeeringEnableOnlyIPv6Peering: false
         remotePeeringName: 'customName'
+        remotePeeringPeerCompleteVnets: true
         remoteVirtualNetworkResourceId: '<remoteVirtualNetworkResourceId>'
         useRemoteGateways: false
       }
@@ -924,10 +933,14 @@ module virtualNetwork 'br/public:avm/res/network/virtual-network:<version>' = {
           "allowForwardedTraffic": true,
           "allowGatewayTransit": false,
           "allowVirtualNetworkAccess": true,
+          "enableOnlyIPv6Peering": false,
+          "peerCompleteVnets": true,
           "remotePeeringAllowForwardedTraffic": true,
           "remotePeeringAllowVirtualNetworkAccess": true,
           "remotePeeringEnabled": true,
+          "remotePeeringEnableOnlyIPv6Peering": false,
           "remotePeeringName": "customName",
+          "remotePeeringPeerCompleteVnets": true,
           "remoteVirtualNetworkResourceId": "<remoteVirtualNetworkResourceId>",
           "useRemoteGateways": false
         }
@@ -983,10 +996,14 @@ param peerings = [
     allowForwardedTraffic: true
     allowGatewayTransit: false
     allowVirtualNetworkAccess: true
+    enableOnlyIPv6Peering: false
+    peerCompleteVnets: true
     remotePeeringAllowForwardedTraffic: true
     remotePeeringAllowVirtualNetworkAccess: true
     remotePeeringEnabled: true
+    remotePeeringEnableOnlyIPv6Peering: false
     remotePeeringName: 'customName'
+    remotePeeringPeerCompleteVnets: true
     remoteVirtualNetworkResourceId: '<remoteVirtualNetworkResourceId>'
     useRemoteGateways: false
   }
