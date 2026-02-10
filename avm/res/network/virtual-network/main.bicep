@@ -8,7 +8,7 @@ param name string
 param location string = resourceGroup().location
 
 @description('Required. An Array of 1 or more IP Address Prefixes OR the resource ID of the IPAM pool to be used for the Virtual Network. When specifying an IPAM pool resource ID you must also set a value for the parameter called `ipamPoolNumberOfIpAddresses`.')
-param addressPrefixes array
+param addressPrefixes string[]
 
 @description('Optional. Number of IP addresses allocated from the pool. To be used only when the addressPrefix param is defined with a resource ID of an IPAM pool.')
 param ipamPoolNumberOfIpAddresses string?
@@ -55,13 +55,22 @@ import { roleAssignmentType } from 'br/public:avm/utl/types/avm-common-types:0.2
 param roleAssignments roleAssignmentType[]?
 
 @description('Optional. Tags of the resource.')
-param tags object?
+param tags resourceInput<'Microsoft.Network/virtualNetworks@2025-05-01'>.tags?
 
 @description('Optional. Enable/Disable usage telemetry for module.')
 param enableTelemetry bool = true
 
 @description('Optional. Indicates if VM protection is enabled for all the subnets in the virtual network.')
 param enableVmProtection bool?
+
+@description('Optional. The extended location of the virtual network.')
+param extendedLocation resourceInput<'Microsoft.Network/virtualNetworks@2025-05-01'>.extendedLocation?
+
+@description('Optional. Array of IpAllocation which reference this VNET.')
+param ipAllocations resourceInput<'Microsoft.Network/virtualNetworks@2025-05-01'>.properties.ipAllocations?
+
+@description('Optional. Private Endpoint VNet Policies.')
+param privateEndpointVNetPolicies ('Basic' | 'Disabled')?
 
 var enableReferencedModulesTelemetry = false
 
@@ -117,10 +126,11 @@ resource avmTelemetry 'Microsoft.Resources/deployments@2024-03-01' = if (enableT
   }
 }
 
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2025-05-01' = {
   name: name
   location: location
   tags: tags
+  extendedLocation: extendedLocation
   properties: {
     addressSpace: contains(addressPrefixes[0], '/Microsoft.Network/networkManagers/')
       ? {
@@ -160,6 +170,8 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-05-01' = {
       : null
     flowTimeoutInMinutes: flowTimeoutInMinutes != 0 ? flowTimeoutInMinutes : null
     enableVmProtection: enableVmProtection
+    ipAllocations: ipAllocations
+    privateEndpointVNetPolicies: privateEndpointVNetPolicies
   }
 }
 
@@ -185,6 +197,8 @@ module virtualNetwork_subnets 'subnet/main.bicep' = [
       serviceEndpoints: subnet.?serviceEndpoints
       defaultOutboundAccess: subnet.?defaultOutboundAccess
       sharingScope: subnet.?sharingScope
+      ipAllocations: subnet.?ipAllocations
+      serviceGatewayResourceId: subnet.?serviceGatewayResourceId
       enableTelemetry: enableReferencedModulesTelemetry
     }
   }
@@ -207,6 +221,12 @@ module virtualNetwork_peering_local 'virtual-network-peering/main.bicep' = [
       allowGatewayTransit: peering.?allowGatewayTransit
       allowVirtualNetworkAccess: peering.?allowVirtualNetworkAccess
       doNotVerifyRemoteGateways: peering.?doNotVerifyRemoteGateways
+      enableOnlyIPv6Peering: peering.?enableOnlyIPv6Peering
+      localAddressSpace: peering.?localAddressSpace
+      localSubnetNames: peering.?localSubnetNames
+      peerCompleteVnets: peering.?peerCompleteVnets
+      remoteAddressSpace: peering.?remoteAddressSpace
+      remoteSubnetNames: peering.?remoteSubnetNames
       useRemoteGateways: peering.?useRemoteGateways
     }
   }
@@ -233,6 +253,12 @@ module virtualNetwork_peering_remote 'virtual-network-peering/main.bicep' = [
       allowGatewayTransit: peering.?remotePeeringAllowGatewayTransit
       allowVirtualNetworkAccess: peering.?remotePeeringAllowVirtualNetworkAccess
       doNotVerifyRemoteGateways: peering.?remotePeeringDoNotVerifyRemoteGateways
+      enableOnlyIPv6Peering: peering.?remotePeeringEnableOnlyIPv6Peering
+      localAddressSpace: peering.?remotePeeringLocalAddressSpace
+      localSubnetNames: peering.?remotePeeringLocalSubnetNames
+      peerCompleteVnets: peering.?remotePeeringPeerCompleteVnets
+      remoteAddressSpace: peering.?remotePeeringRemoteAddressSpace
+      remoteSubnetNames: peering.?remotePeeringRemoteSubnetNames
       useRemoteGateways: peering.?remotePeeringUseRemoteGateways
     }
   }
@@ -304,10 +330,10 @@ output resourceId string = virtualNetwork.id
 output name string = virtualNetwork.name
 
 @description('The names of the deployed subnets.')
-output subnetNames array = [for (subnet, index) in (subnets ?? []): virtualNetwork_subnets[index].outputs.name]
+output subnetNames string[] = [for (subnet, index) in (subnets ?? []): virtualNetwork_subnets[index].outputs.name]
 
 @description('The resource IDs of the deployed subnets.')
-output subnetResourceIds array = [
+output subnetResourceIds string[] = [
   for (subnet, index) in (subnets ?? []): virtualNetwork_subnets[index].outputs.resourceId
 ]
 
@@ -338,6 +364,24 @@ type peeringType = {
   @description('Optional. Do not verify the provisioning state of the remote gateway. Default is true.')
   doNotVerifyRemoteGateways: bool?
 
+  @description('Optional. Whether only Ipv6 address space is peered for subnet peering.')
+  enableOnlyIPv6Peering: bool?
+
+  @description('Optional. The local address space of the local virtual network that is peered.')
+  localAddressSpace: resourceInput<'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01'>.properties.localAddressSpace?
+
+  @description('Optional. List of local subnet names that are subnet peered with remote virtual network.')
+  localSubnetNames: string[]?
+
+  @description('Optional. Whether complete virtual network address space is peered.')
+  peerCompleteVnets: bool?
+
+  @description('Optional. The reference to the address space peered with the remote virtual network.')
+  remoteAddressSpace: resourceInput<'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01'>.properties.remoteAddressSpace?
+
+  @description('Optional. List of remote subnet names from remote virtual network that are subnet peered.')
+  remoteSubnetNames: string[]?
+
   @description('Optional. If remote gateways can be used on this virtual network. If the flag is set to true, and allowGatewayTransit on remote peering is also true, virtual network will use gateways of remote virtual network for transit. Only one peering can have this flag set to true. This flag cannot be set if virtual network already has a gateway. Default is false.')
   useRemoteGateways: bool?
 
@@ -361,6 +405,24 @@ type peeringType = {
 
   @description('Optional. If remote gateways can be used on this virtual network. If the flag is set to true, and allowGatewayTransit on remote peering is also true, virtual network will use gateways of remote virtual network for transit. Only one peering can have this flag set to true. This flag cannot be set if virtual network already has a gateway. Default is false.')
   remotePeeringUseRemoteGateways: bool?
+
+  @description('Optional. Whether only Ipv6 address space is peered for subnet peering in the remote peering.')
+  remotePeeringEnableOnlyIPv6Peering: bool?
+
+  @description('Optional. The local address space of the local virtual network that is peered in the remote peering.')
+  remotePeeringLocalAddressSpace: resourceInput<'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01'>.properties.localAddressSpace?
+
+  @description('Optional. List of local subnet names that are subnet peered with remote virtual network in the remote peering.')
+  remotePeeringLocalSubnetNames: string[]?
+
+  @description('Optional. Whether complete virtual network address space is peered in the remote peering.')
+  remotePeeringPeerCompleteVnets: bool?
+
+  @description('Optional. The reference to the address space peered with the remote virtual network in the remote peering.')
+  remotePeeringRemoteAddressSpace: resourceInput<'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01'>.properties.remoteAddressSpace?
+
+  @description('Optional. List of remote subnet names from remote virtual network that are subnet peered in the remote peering.')
+  remotePeeringRemoteSubnetNames: string[]?
 }
 
 @export()
@@ -375,20 +437,10 @@ type subnetType = {
   addressPrefixes: string[]?
 
   @description('Conditional. The address space for the subnet, deployed from IPAM Pool. Required if `addressPrefixes` and `addressPrefix` is empty and the VNet address space configured to use IPAM Pool.')
-  ipamPoolPrefixAllocations: [
-    {
-      @description('Required. The Resource ID of the IPAM pool.')
-      pool: {
-        @description('Required. The Resource ID of the IPAM pool.')
-        id: string
-      }
-      @description('Required. Number of IP addresses allocated from the pool.')
-      numberOfIpAddresses: string
-    }
-  ]?
+  ipamPoolPrefixAllocations: resourceInput<'Microsoft.Network/virtualNetworks/subnets@2025-05-01'>.properties.ipamPoolPrefixAllocations?
 
   @description('Optional. Application gateway IP configurations of virtual network resource.')
-  applicationGatewayIPConfigurations: object[]?
+  applicationGatewayIPConfigurations: resourceInput<'Microsoft.Network/virtualNetworks/subnets@2025-05-01'>.properties.applicationGatewayIPConfigurations?
 
   @description('Optional. The delegation to enable on the subnet.')
   delegation: string?
@@ -412,7 +464,7 @@ type subnetType = {
   routeTableResourceId: string?
 
   @description('Optional. An array of service endpoint policies.')
-  serviceEndpointPolicies: object[]?
+  serviceEndpointPolicies: resourceInput<'Microsoft.Network/virtualNetworks/subnets@2025-05-01'>.properties.serviceEndpointPolicies?
 
   @description('Optional. The service endpoints to enable on the subnet.')
   serviceEndpoints: string[]?
@@ -422,4 +474,10 @@ type subnetType = {
 
   @description('Optional. Set this property to Tenant to allow sharing subnet with other subscriptions in your AAD tenant. This property can only be set if defaultOutboundAccess is set to false, both properties can only be set if subnet is empty.')
   sharingScope: ('DelegatedServices' | 'Tenant')?
+
+  @description('Optional. Array of IpAllocation which reference this subnet.')
+  ipAllocations: resourceInput<'Microsoft.Network/virtualNetworks/subnets@2025-05-01'>.properties.ipAllocations?
+
+  @description('Optional. The resource ID of the service gateway associated with the subnet.')
+  serviceGatewayResourceId: string?
 }
