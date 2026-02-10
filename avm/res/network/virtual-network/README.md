@@ -27,9 +27,9 @@ For examples, please refer to the [Usage Examples](#usage-examples) section.
 | `Microsoft.Authorization/locks` | 2020-05-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.authorization_locks.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2020-05-01/locks)</li></ul> |
 | `Microsoft.Authorization/roleAssignments` | 2022-04-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.authorization_roleassignments.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2022-04-01/roleAssignments)</li></ul> |
 | `Microsoft.Insights/diagnosticSettings` | 2021-05-01-preview | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.insights_diagnosticsettings.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Insights/2021-05-01-preview/diagnosticSettings)</li></ul> |
-| `Microsoft.Network/virtualNetworks` | 2024-05-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.network_virtualnetworks.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2024-05-01/virtualNetworks)</li></ul> |
-| `Microsoft.Network/virtualNetworks/subnets` | 2024-05-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.network_virtualnetworks_subnets.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2024-05-01/virtualNetworks/subnets)</li></ul> |
-| `Microsoft.Network/virtualNetworks/virtualNetworkPeerings` | 2024-01-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.network_virtualnetworks_virtualnetworkpeerings.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2024-01-01/virtualNetworks/virtualNetworkPeerings)</li></ul> |
+| `Microsoft.Network/virtualNetworks` | 2025-05-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.network_virtualnetworks.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2025-05-01/virtualNetworks)</li></ul> |
+| `Microsoft.Network/virtualNetworks/subnets` | 2025-05-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.network_virtualnetworks_subnets.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2025-05-01/virtualNetworks/subnets)</li></ul> |
+| `Microsoft.Network/virtualNetworks/virtualNetworkPeerings` | 2025-05-01 | <ul style="padding-left: 0px;"><li>[AzAdvertizer](https://www.azadvertizer.net/azresourcetypes/microsoft.network_virtualnetworks_virtualnetworkpeerings.html)</li><li>[Template reference](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2025-05-01/virtualNetworks/virtualNetworkPeerings)</li></ul> |
 
 ## Usage examples
 
@@ -1327,11 +1327,14 @@ param tags = {
 | [`dnsServers`](#parameter-dnsservers) | array | DNS Servers associated to the Virtual Network. |
 | [`enableTelemetry`](#parameter-enabletelemetry) | bool | Enable/Disable usage telemetry for module. |
 | [`enableVmProtection`](#parameter-enablevmprotection) | bool | Indicates if VM protection is enabled for all the subnets in the virtual network. |
+| [`extendedLocation`](#parameter-extendedlocation) | object | The extended location of the virtual network. |
 | [`flowTimeoutInMinutes`](#parameter-flowtimeoutinminutes) | int | The flow timeout in minutes for the Virtual Network, which is used to enable connection tracking for intra-VM flows. Possible values are between 4 and 30 minutes. Default value 0 will set the property to null. |
+| [`ipAllocations`](#parameter-ipallocations) | array | Array of IpAllocation which reference this VNET. |
 | [`ipamPoolNumberOfIpAddresses`](#parameter-ipampoolnumberofipaddresses) | string | Number of IP addresses allocated from the pool. To be used only when the addressPrefix param is defined with a resource ID of an IPAM pool. |
 | [`location`](#parameter-location) | string | Location for all resources. |
 | [`lock`](#parameter-lock) | object | The lock settings of the service. |
 | [`peerings`](#parameter-peerings) | array | Virtual Network Peering configurations. |
+| [`privateEndpointVNetPolicies`](#parameter-privateendpointvnetpolicies) | string | Private Endpoint VNet Policies. |
 | [`roleAssignments`](#parameter-roleassignments) | array | Array of role assignments to create. |
 | [`subnets`](#parameter-subnets) | array | An Array of subnets to deploy to the Virtual Network. |
 | [`tags`](#parameter-tags) | object | Tags of the resource. |
@@ -1528,6 +1531,13 @@ Indicates if VM protection is enabled for all the subnets in the virtual network
 - Required: No
 - Type: bool
 
+### Parameter: `extendedLocation`
+
+The extended location of the virtual network.
+
+- Required: No
+- Type: object
+
 ### Parameter: `flowTimeoutInMinutes`
 
 The flow timeout in minutes for the Virtual Network, which is used to enable connection tracking for intra-VM flows. Possible values are between 4 and 30 minutes. Default value 0 will set the property to null.
@@ -1536,6 +1546,13 @@ The flow timeout in minutes for the Virtual Network, which is used to enable con
 - Type: int
 - Default: `0`
 - MaxValue: 30
+
+### Parameter: `ipAllocations`
+
+Array of IpAllocation which reference this VNET.
+
+- Required: No
+- Type: array
 
 ### Parameter: `ipamPoolNumberOfIpAddresses`
 
@@ -1617,14 +1634,26 @@ Virtual Network Peering configurations.
 | [`allowGatewayTransit`](#parameter-peeringsallowgatewaytransit) | bool | If gateway links can be used in remote virtual networking to link to this virtual network. Default is false. |
 | [`allowVirtualNetworkAccess`](#parameter-peeringsallowvirtualnetworkaccess) | bool | Whether the VMs in the local virtual network space would be able to access the VMs in remote virtual network space. Default is true. |
 | [`doNotVerifyRemoteGateways`](#parameter-peeringsdonotverifyremotegateways) | bool | Do not verify the provisioning state of the remote gateway. Default is true. |
+| [`enableOnlyIPv6Peering`](#parameter-peeringsenableonlyipv6peering) | bool | Whether only Ipv6 address space is peered for subnet peering. |
+| [`localAddressSpace`](#parameter-peeringslocaladdressspace) | object | The local address space of the local virtual network that is peered. |
+| [`localSubnetNames`](#parameter-peeringslocalsubnetnames) | array | List of local subnet names that are subnet peered with remote virtual network. |
 | [`name`](#parameter-peeringsname) | string | The Name of VNET Peering resource. If not provided, default value will be peer-localVnetName-remoteVnetName. |
+| [`peerCompleteVnets`](#parameter-peeringspeercompletevnets) | bool | Whether complete virtual network address space is peered. |
+| [`remoteAddressSpace`](#parameter-peeringsremoteaddressspace) | object | The reference to the address space peered with the remote virtual network. |
 | [`remotePeeringAllowForwardedTraffic`](#parameter-peeringsremotepeeringallowforwardedtraffic) | bool | Whether the forwarded traffic from the VMs in the local virtual network will be allowed/disallowed in remote virtual network. Default is true. |
 | [`remotePeeringAllowGatewayTransit`](#parameter-peeringsremotepeeringallowgatewaytransit) | bool | If gateway links can be used in remote virtual networking to link to this virtual network. Default is false. |
 | [`remotePeeringAllowVirtualNetworkAccess`](#parameter-peeringsremotepeeringallowvirtualnetworkaccess) | bool | Whether the VMs in the local virtual network space would be able to access the VMs in remote virtual network space. Default is true. |
 | [`remotePeeringDoNotVerifyRemoteGateways`](#parameter-peeringsremotepeeringdonotverifyremotegateways) | bool | Do not verify the provisioning state of the remote gateway. Default is true. |
 | [`remotePeeringEnabled`](#parameter-peeringsremotepeeringenabled) | bool | Deploy the outbound and the inbound peering. |
+| [`remotePeeringEnableOnlyIPv6Peering`](#parameter-peeringsremotepeeringenableonlyipv6peering) | bool | Whether only Ipv6 address space is peered for subnet peering in the remote peering. |
+| [`remotePeeringLocalAddressSpace`](#parameter-peeringsremotepeeringlocaladdressspace) | object | The local address space of the local virtual network that is peered in the remote peering. |
+| [`remotePeeringLocalSubnetNames`](#parameter-peeringsremotepeeringlocalsubnetnames) | array | List of local subnet names that are subnet peered with remote virtual network in the remote peering. |
 | [`remotePeeringName`](#parameter-peeringsremotepeeringname) | string | The name of the VNET Peering resource in the remove Virtual Network. If not provided, default value will be peer-remoteVnetName-localVnetName. |
+| [`remotePeeringPeerCompleteVnets`](#parameter-peeringsremotepeeringpeercompletevnets) | bool | Whether complete virtual network address space is peered in the remote peering. |
+| [`remotePeeringRemoteAddressSpace`](#parameter-peeringsremotepeeringremoteaddressspace) | object | The reference to the address space peered with the remote virtual network in the remote peering. |
+| [`remotePeeringRemoteSubnetNames`](#parameter-peeringsremotepeeringremotesubnetnames) | array | List of remote subnet names from remote virtual network that are subnet peered in the remote peering. |
 | [`remotePeeringUseRemoteGateways`](#parameter-peeringsremotepeeringuseremotegateways) | bool | If remote gateways can be used on this virtual network. If the flag is set to true, and allowGatewayTransit on remote peering is also true, virtual network will use gateways of remote virtual network for transit. Only one peering can have this flag set to true. This flag cannot be set if virtual network already has a gateway. Default is false. |
+| [`remoteSubnetNames`](#parameter-peeringsremotesubnetnames) | array | List of remote subnet names from remote virtual network that are subnet peered. |
 | [`useRemoteGateways`](#parameter-peeringsuseremotegateways) | bool | If remote gateways can be used on this virtual network. If the flag is set to true, and allowGatewayTransit on remote peering is also true, virtual network will use gateways of remote virtual network for transit. Only one peering can have this flag set to true. This flag cannot be set if virtual network already has a gateway. Default is false. |
 
 ### Parameter: `peerings.remoteVirtualNetworkResourceId`
@@ -1662,12 +1691,47 @@ Do not verify the provisioning state of the remote gateway. Default is true.
 - Required: No
 - Type: bool
 
+### Parameter: `peerings.enableOnlyIPv6Peering`
+
+Whether only Ipv6 address space is peered for subnet peering.
+
+- Required: No
+- Type: bool
+
+### Parameter: `peerings.localAddressSpace`
+
+The local address space of the local virtual network that is peered.
+
+- Required: No
+- Type: object
+
+### Parameter: `peerings.localSubnetNames`
+
+List of local subnet names that are subnet peered with remote virtual network.
+
+- Required: No
+- Type: array
+
 ### Parameter: `peerings.name`
 
 The Name of VNET Peering resource. If not provided, default value will be peer-localVnetName-remoteVnetName.
 
 - Required: No
 - Type: string
+
+### Parameter: `peerings.peerCompleteVnets`
+
+Whether complete virtual network address space is peered.
+
+- Required: No
+- Type: bool
+
+### Parameter: `peerings.remoteAddressSpace`
+
+The reference to the address space peered with the remote virtual network.
+
+- Required: No
+- Type: object
 
 ### Parameter: `peerings.remotePeeringAllowForwardedTraffic`
 
@@ -1704,12 +1768,54 @@ Deploy the outbound and the inbound peering.
 - Required: No
 - Type: bool
 
+### Parameter: `peerings.remotePeeringEnableOnlyIPv6Peering`
+
+Whether only Ipv6 address space is peered for subnet peering in the remote peering.
+
+- Required: No
+- Type: bool
+
+### Parameter: `peerings.remotePeeringLocalAddressSpace`
+
+The local address space of the local virtual network that is peered in the remote peering.
+
+- Required: No
+- Type: object
+
+### Parameter: `peerings.remotePeeringLocalSubnetNames`
+
+List of local subnet names that are subnet peered with remote virtual network in the remote peering.
+
+- Required: No
+- Type: array
+
 ### Parameter: `peerings.remotePeeringName`
 
 The name of the VNET Peering resource in the remove Virtual Network. If not provided, default value will be peer-remoteVnetName-localVnetName.
 
 - Required: No
 - Type: string
+
+### Parameter: `peerings.remotePeeringPeerCompleteVnets`
+
+Whether complete virtual network address space is peered in the remote peering.
+
+- Required: No
+- Type: bool
+
+### Parameter: `peerings.remotePeeringRemoteAddressSpace`
+
+The reference to the address space peered with the remote virtual network in the remote peering.
+
+- Required: No
+- Type: object
+
+### Parameter: `peerings.remotePeeringRemoteSubnetNames`
+
+List of remote subnet names from remote virtual network that are subnet peered in the remote peering.
+
+- Required: No
+- Type: array
 
 ### Parameter: `peerings.remotePeeringUseRemoteGateways`
 
@@ -1718,12 +1824,33 @@ If remote gateways can be used on this virtual network. If the flag is set to tr
 - Required: No
 - Type: bool
 
+### Parameter: `peerings.remoteSubnetNames`
+
+List of remote subnet names from remote virtual network that are subnet peered.
+
+- Required: No
+- Type: array
+
 ### Parameter: `peerings.useRemoteGateways`
 
 If remote gateways can be used on this virtual network. If the flag is set to true, and allowGatewayTransit on remote peering is also true, virtual network will use gateways of remote virtual network for transit. Only one peering can have this flag set to true. This flag cannot be set if virtual network already has a gateway. Default is false.
 
 - Required: No
 - Type: bool
+
+### Parameter: `privateEndpointVNetPolicies`
+
+Private Endpoint VNet Policies.
+
+- Required: No
+- Type: string
+- Allowed:
+  ```Bicep
+  [
+    'Basic'
+    'Disabled'
+  ]
+  ```
 
 ### Parameter: `roleAssignments`
 
@@ -1857,6 +1984,7 @@ An Array of subnets to deploy to the Virtual Network.
 | [`applicationGatewayIPConfigurations`](#parameter-subnetsapplicationgatewayipconfigurations) | array | Application gateway IP configurations of virtual network resource. |
 | [`defaultOutboundAccess`](#parameter-subnetsdefaultoutboundaccess) | bool | Set this property to false to disable default outbound connectivity for all VMs in the subnet. This property can only be set at the time of subnet creation and cannot be updated for an existing subnet. |
 | [`delegation`](#parameter-subnetsdelegation) | string | The delegation to enable on the subnet. |
+| [`ipAllocations`](#parameter-subnetsipallocations) | array | Array of IpAllocation which reference this subnet. |
 | [`natGatewayResourceId`](#parameter-subnetsnatgatewayresourceid) | string | The resource ID of the NAT Gateway to use for the subnet. |
 | [`networkSecurityGroupResourceId`](#parameter-subnetsnetworksecuritygroupresourceid) | string | The resource ID of the network security group to assign to the subnet. |
 | [`privateEndpointNetworkPolicies`](#parameter-subnetsprivateendpointnetworkpolicies) | string | enable or disable apply network policies on private endpoint in the subnet. |
@@ -1865,6 +1993,7 @@ An Array of subnets to deploy to the Virtual Network.
 | [`routeTableResourceId`](#parameter-subnetsroutetableresourceid) | string | The resource ID of the route table to assign to the subnet. |
 | [`serviceEndpointPolicies`](#parameter-subnetsserviceendpointpolicies) | array | An array of service endpoint policies. |
 | [`serviceEndpoints`](#parameter-subnetsserviceendpoints) | array | The service endpoints to enable on the subnet. |
+| [`serviceGatewayResourceId`](#parameter-subnetsservicegatewayresourceid) | string | The resource ID of the service gateway associated with the subnet. |
 | [`sharingScope`](#parameter-subnetssharingscope) | string | Set this property to Tenant to allow sharing subnet with other subscriptions in your AAD tenant. This property can only be set if defaultOutboundAccess is set to false, both properties can only be set if subnet is empty. |
 
 ### Parameter: `subnets.name`
@@ -1915,6 +2044,13 @@ The delegation to enable on the subnet.
 
 - Required: No
 - Type: string
+
+### Parameter: `subnets.ipAllocations`
+
+Array of IpAllocation which reference this subnet.
+
+- Required: No
+- Type: array
 
 ### Parameter: `subnets.natGatewayResourceId`
 
@@ -2085,6 +2221,13 @@ The service endpoints to enable on the subnet.
 - Required: No
 - Type: array
 
+### Parameter: `subnets.serviceGatewayResourceId`
+
+The resource ID of the service gateway associated with the subnet.
+
+- Required: No
+- Type: string
+
 ### Parameter: `subnets.sharingScope`
 
 Set this property to Tenant to allow sharing subnet with other subscriptions in your AAD tenant. This property can only be set if defaultOutboundAccess is set to false, both properties can only be set if subnet is empty.
@@ -2153,8 +2296,7 @@ This section gives you an overview of all local-referenced module files (i.e., o
 
 | Reference | Type |
 | :-- | :-- |
-| `br/public:avm/utl/types/avm-common-types:0.2.1` | Remote reference |
-| `br/public:avm/utl/types/avm-common-types:0.6.0` | Remote reference |
+| `br/public:avm/utl/types/avm-common-types:0.6.1` | Remote reference |
 
 ## Notes
 

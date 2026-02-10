@@ -5,8 +5,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.37.4.10188",
-      "templateHash": "646554382773802541"
+      "version": "0.40.2.10011",
+      "templateHash": "1719671825212455656"
     },
     "name": "Virtual Network Subnets",
     "description": "This module deploys a Virtual Network Subnet."
@@ -83,7 +83,7 @@
       "metadata": {
         "description": "An AVM-aligned type for a role assignment.",
         "__bicep_imported_from!": {
-          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.2.1"
+          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.6.1"
         }
       }
     }
@@ -110,13 +110,13 @@
     },
     "ipamPoolPrefixAllocations": {
       "type": "array",
-      "items": {
-        "type": "object"
-      },
-      "nullable": true,
       "metadata": {
+        "__bicep_resource_derived_type!": {
+          "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/ipamPoolPrefixAllocations"
+        },
         "description": "Conditional. The address space for the subnet, deployed from IPAM Pool. Required if `addressPrefixes` and `addressPrefix` is empty."
-      }
+      },
+      "nullable": true
     },
     "networkSecurityGroupResourceId": {
       "type": "string",
@@ -210,16 +210,38 @@
     },
     "applicationGatewayIPConfigurations": {
       "type": "array",
-      "defaultValue": [],
       "metadata": {
+        "__bicep_resource_derived_type!": {
+          "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/applicationGatewayIPConfigurations"
+        },
         "description": "Optional. Application gateway IP configurations of virtual network resource."
-      }
+      },
+      "defaultValue": []
     },
     "serviceEndpointPolicies": {
       "type": "array",
-      "defaultValue": [],
       "metadata": {
+        "__bicep_resource_derived_type!": {
+          "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/serviceEndpointPolicies"
+        },
         "description": "Optional. An array of service endpoint policies."
+      },
+      "defaultValue": []
+    },
+    "ipAllocations": {
+      "type": "array",
+      "metadata": {
+        "__bicep_resource_derived_type!": {
+          "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/ipAllocations"
+        },
+        "description": "Optional. Array of IpAllocation which reference this subnet."
+      }
+    },
+    "serviceGatewayResourceId": {
+      "type": "string",
+      "nullable": true,
+      "metadata": {
+        "description": "Optional. The resource ID of the service gateway associated with the subnet."
       }
     },
     "roleAssignments": {
@@ -281,12 +303,12 @@
     "virtualNetwork": {
       "existing": true,
       "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2024-01-01",
+      "apiVersion": "2025-05-01",
       "name": "[parameters('virtualNetworkName')]"
     },
     "subnet": {
       "type": "Microsoft.Network/virtualNetworks/subnets",
-      "apiVersion": "2024-05-01",
+      "apiVersion": "2025-05-01",
       "name": "[format('{0}/{1}', parameters('virtualNetworkName'), parameters('name'))]",
       "properties": {
         "copy": [
@@ -310,7 +332,9 @@
         "applicationGatewayIPConfigurations": "[parameters('applicationGatewayIPConfigurations')]",
         "serviceEndpointPolicies": "[parameters('serviceEndpointPolicies')]",
         "defaultOutboundAccess": "[parameters('defaultOutboundAccess')]",
-        "sharingScope": "[parameters('sharingScope')]"
+        "sharingScope": "[parameters('sharingScope')]",
+        "ipAllocations": "[parameters('ipAllocations')]",
+        "serviceGateway": "[if(not(empty(parameters('serviceGatewayResourceId'))), createObject('id', parameters('serviceGatewayResourceId')), null())]"
       }
     },
     "subnet_roleAssignments": {
@@ -320,7 +344,7 @@
       },
       "type": "Microsoft.Authorization/roleAssignments",
       "apiVersion": "2022-04-01",
-      "scope": "[format('Microsoft.Network/virtualNetworks/{0}/subnets/{1}', parameters('virtualNetworkName'), parameters('name'))]",
+      "scope": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('name'))]",
       "name": "[coalesce(tryGet(coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()], 'name'), guid(resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('name')), coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()].principalId, coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()].roleDefinitionId))]",
       "properties": {
         "roleDefinitionId": "[coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()].roleDefinitionId]",
@@ -368,6 +392,10 @@
     "addressPrefixes": {
       "type": "array",
       "metadata": {
+        "__bicep_resource_derived_type!": {
+          "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/addressPrefixes",
+          "output": true
+        },
         "description": "List of address prefixes for the subnet."
       },
       "value": "[coalesce(tryGet(reference('subnet'), 'addressPrefixes'), createArray())]"
@@ -375,6 +403,10 @@
     "ipamPoolPrefixAllocations": {
       "type": "array",
       "metadata": {
+        "__bicep_resource_derived_type!": {
+          "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/ipamPoolPrefixAllocations",
+          "output": true
+        },
         "description": "The IPAM pool prefix allocations for the subnet."
       },
       "value": "[coalesce(tryGet(reference('subnet'), 'ipamPoolPrefixAllocations'), createArray())]"

@@ -5,8 +5,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.39.26.7824",
-      "templateHash": "14227910717309267399"
+      "version": "0.40.2.10011",
+      "templateHash": "15659179404497499919"
     },
     "name": "Virtual Networks",
     "description": "This module deploys a Virtual Network (vNet)."
@@ -54,6 +54,60 @@
           "nullable": true,
           "metadata": {
             "description": "Optional. Do not verify the provisioning state of the remote gateway. Default is true."
+          }
+        },
+        "enableOnlyIPv6Peering": {
+          "type": "bool",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Whether only Ipv6 address space is peered for subnet peering."
+          }
+        },
+        "localAddressSpace": {
+          "type": "object",
+          "metadata": {
+            "__bicep_resource_derived_type!": {
+              "source": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01#properties/properties/properties/localAddressSpace"
+            },
+            "description": "Optional. The local address space of the local virtual network that is peered."
+          },
+          "nullable": true
+        },
+        "localSubnetNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. List of local subnet names that are subnet peered with remote virtual network."
+          }
+        },
+        "peerCompleteVnets": {
+          "type": "bool",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Whether complete virtual network address space is peered."
+          }
+        },
+        "remoteAddressSpace": {
+          "type": "object",
+          "metadata": {
+            "__bicep_resource_derived_type!": {
+              "source": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01#properties/properties/properties/remoteAddressSpace"
+            },
+            "description": "Optional. The reference to the address space peered with the remote virtual network."
+          },
+          "nullable": true
+        },
+        "remoteSubnetNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. List of remote subnet names from remote virtual network that are subnet peered."
           }
         },
         "useRemoteGateways": {
@@ -111,6 +165,60 @@
           "metadata": {
             "description": "Optional. If remote gateways can be used on this virtual network. If the flag is set to true, and allowGatewayTransit on remote peering is also true, virtual network will use gateways of remote virtual network for transit. Only one peering can have this flag set to true. This flag cannot be set if virtual network already has a gateway. Default is false."
           }
+        },
+        "remotePeeringEnableOnlyIPv6Peering": {
+          "type": "bool",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Whether only Ipv6 address space is peered for subnet peering in the remote peering."
+          }
+        },
+        "remotePeeringLocalAddressSpace": {
+          "type": "object",
+          "metadata": {
+            "__bicep_resource_derived_type!": {
+              "source": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01#properties/properties/properties/localAddressSpace"
+            },
+            "description": "Optional. The local address space of the local virtual network that is peered in the remote peering."
+          },
+          "nullable": true
+        },
+        "remotePeeringLocalSubnetNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. List of local subnet names that are subnet peered with remote virtual network in the remote peering."
+          }
+        },
+        "remotePeeringPeerCompleteVnets": {
+          "type": "bool",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Whether complete virtual network address space is peered in the remote peering."
+          }
+        },
+        "remotePeeringRemoteAddressSpace": {
+          "type": "object",
+          "metadata": {
+            "__bicep_resource_derived_type!": {
+              "source": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01#properties/properties/properties/remoteAddressSpace"
+            },
+            "description": "Optional. The reference to the address space peered with the remote virtual network in the remote peering."
+          },
+          "nullable": true
+        },
+        "remotePeeringRemoteSubnetNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. List of remote subnet names from remote virtual network that are subnet peered in the remote peering."
+          }
         }
       },
       "metadata": {
@@ -145,48 +253,23 @@
         },
         "ipamPoolPrefixAllocations": {
           "type": "array",
-          "prefixItems": [
-            {
-              "type": "object",
-              "properties": {
-                "pool": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "metadata": {
-                        "description": "Required. The Resource ID of the IPAM pool."
-                      }
-                    }
-                  },
-                  "metadata": {
-                    "description": "Required. The Resource ID of the IPAM pool."
-                  }
-                },
-                "numberOfIpAddresses": {
-                  "type": "string",
-                  "metadata": {
-                    "description": "Required. Number of IP addresses allocated from the pool."
-                  }
-                }
-              }
-            }
-          ],
-          "items": false,
-          "nullable": true,
           "metadata": {
+            "__bicep_resource_derived_type!": {
+              "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/ipamPoolPrefixAllocations"
+            },
             "description": "Conditional. The address space for the subnet, deployed from IPAM Pool. Required if `addressPrefixes` and `addressPrefix` is empty and the VNet address space configured to use IPAM Pool."
-          }
+          },
+          "nullable": true
         },
         "applicationGatewayIPConfigurations": {
           "type": "array",
-          "items": {
-            "type": "object"
-          },
-          "nullable": true,
           "metadata": {
+            "__bicep_resource_derived_type!": {
+              "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/applicationGatewayIPConfigurations"
+            },
             "description": "Optional. Application gateway IP configurations of virtual network resource."
-          }
+          },
+          "nullable": true
         },
         "delegation": {
           "type": "string",
@@ -252,13 +335,13 @@
         },
         "serviceEndpointPolicies": {
           "type": "array",
-          "items": {
-            "type": "object"
-          },
-          "nullable": true,
           "metadata": {
+            "__bicep_resource_derived_type!": {
+              "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/serviceEndpointPolicies"
+            },
             "description": "Optional. An array of service endpoint policies."
-          }
+          },
+          "nullable": true
         },
         "serviceEndpoints": {
           "type": "array",
@@ -286,6 +369,23 @@
           "nullable": true,
           "metadata": {
             "description": "Optional. Set this property to Tenant to allow sharing subnet with other subscriptions in your AAD tenant. This property can only be set if defaultOutboundAccess is set to false, both properties can only be set if subnet is empty."
+          }
+        },
+        "ipAllocations": {
+          "type": "array",
+          "metadata": {
+            "__bicep_resource_derived_type!": {
+              "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/ipAllocations"
+            },
+            "description": "Optional. Array of IpAllocation which reference this subnet."
+          },
+          "nullable": true
+        },
+        "serviceGatewayResourceId": {
+          "type": "string",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. The resource ID of the service gateway associated with the subnet."
           }
         }
       },
@@ -411,7 +511,7 @@
       "metadata": {
         "description": "An AVM-aligned type for a diagnostic setting. To be used if both logs & metrics are supported by the resource provider.",
         "__bicep_imported_from!": {
-          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.2.1"
+          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.6.1"
         }
       }
     },
@@ -448,7 +548,7 @@
       "metadata": {
         "description": "An AVM-aligned type for a lock.",
         "__bicep_imported_from!": {
-          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.6.0"
+          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.6.1"
         }
       }
     },
@@ -523,7 +623,7 @@
       "metadata": {
         "description": "An AVM-aligned type for a role assignment.",
         "__bicep_imported_from!": {
-          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.2.1"
+          "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.6.1"
         }
       }
     }
@@ -544,6 +644,9 @@
     },
     "addressPrefixes": {
       "type": "array",
+      "items": {
+        "type": "string"
+      },
       "metadata": {
         "description": "Required. An Array of 1 or more IP Address Prefixes OR the resource ID of the IPAM pool to be used for the Virtual Network. When specifying an IPAM pool resource ID you must also set a value for the parameter called `ipamPoolNumberOfIpAddresses`."
       }
@@ -654,10 +757,13 @@
     },
     "tags": {
       "type": "object",
-      "nullable": true,
       "metadata": {
+        "__bicep_resource_derived_type!": {
+          "source": "Microsoft.Network/virtualNetworks@2025-05-01#properties/tags"
+        },
         "description": "Optional. Tags of the resource."
-      }
+      },
+      "nullable": true
     },
     "enableTelemetry": {
       "type": "bool",
@@ -671,6 +777,37 @@
       "nullable": true,
       "metadata": {
         "description": "Optional. Indicates if VM protection is enabled for all the subnets in the virtual network."
+      }
+    },
+    "extendedLocation": {
+      "type": "object",
+      "metadata": {
+        "__bicep_resource_derived_type!": {
+          "source": "Microsoft.Network/virtualNetworks@2025-05-01#properties/extendedLocation"
+        },
+        "description": "Optional. The extended location of the virtual network."
+      },
+      "nullable": true
+    },
+    "ipAllocations": {
+      "type": "array",
+      "metadata": {
+        "__bicep_resource_derived_type!": {
+          "source": "Microsoft.Network/virtualNetworks@2025-05-01#properties/properties/properties/ipAllocations"
+        },
+        "description": "Optional. Array of IpAllocation which reference this VNET."
+      },
+      "nullable": true
+    },
+    "privateEndpointVNetPolicies": {
+      "type": "string",
+      "allowedValues": [
+        "Basic",
+        "Disabled"
+      ],
+      "nullable": true,
+      "metadata": {
+        "description": "Optional. Private Endpoint VNet Policies."
       }
     }
   },
@@ -715,10 +852,11 @@
     },
     "virtualNetwork": {
       "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2024-05-01",
+      "apiVersion": "2025-05-01",
       "name": "[parameters('name')]",
       "location": "[parameters('location')]",
       "tags": "[parameters('tags')]",
+      "extendedLocation": "[parameters('extendedLocation')]",
       "properties": {
         "addressSpace": "[if(contains(parameters('addressPrefixes')[0], '/Microsoft.Network/networkManagers/'), createObject('ipamPoolPrefixAllocations', createArray(createObject('pool', createObject('id', parameters('addressPrefixes')[0]), 'numberOfIpAddresses', parameters('ipamPoolNumberOfIpAddresses')))), createObject('addressPrefixes', parameters('addressPrefixes')))]",
         "bgpCommunities": "[if(not(empty(parameters('virtualNetworkBgpCommunity'))), createObject('virtualNetworkCommunity', parameters('virtualNetworkBgpCommunity')), null())]",
@@ -727,14 +865,16 @@
         "enableDdosProtection": "[not(empty(parameters('ddosProtectionPlanResourceId')))]",
         "encryption": "[if(equals(parameters('vnetEncryption'), true()), createObject('enabled', parameters('vnetEncryption'), 'enforcement', parameters('vnetEncryptionEnforcement')), null())]",
         "flowTimeoutInMinutes": "[if(not(equals(parameters('flowTimeoutInMinutes'), 0)), parameters('flowTimeoutInMinutes'), null())]",
-        "enableVmProtection": "[parameters('enableVmProtection')]"
+        "enableVmProtection": "[parameters('enableVmProtection')]",
+        "ipAllocations": "[parameters('ipAllocations')]",
+        "privateEndpointVNetPolicies": "[parameters('privateEndpointVNetPolicies')]"
       }
     },
     "virtualNetwork_lock": {
       "condition": "[and(not(empty(coalesce(parameters('lock'), createObject()))), not(equals(tryGet(parameters('lock'), 'kind'), 'None')))]",
       "type": "Microsoft.Authorization/locks",
       "apiVersion": "2020-05-01",
-      "scope": "[format('Microsoft.Network/virtualNetworks/{0}', parameters('name'))]",
+      "scope": "[resourceId('Microsoft.Network/virtualNetworks', parameters('name'))]",
       "name": "[coalesce(tryGet(parameters('lock'), 'name'), format('lock-{0}', parameters('name')))]",
       "properties": {
         "level": "[coalesce(tryGet(parameters('lock'), 'kind'), '')]",
@@ -751,7 +891,7 @@
       },
       "type": "Microsoft.Insights/diagnosticSettings",
       "apiVersion": "2021-05-01-preview",
-      "scope": "[format('Microsoft.Network/virtualNetworks/{0}', parameters('name'))]",
+      "scope": "[resourceId('Microsoft.Network/virtualNetworks', parameters('name'))]",
       "name": "[coalesce(tryGet(coalesce(parameters('diagnosticSettings'), createArray())[copyIndex()], 'name'), format('{0}-diagnosticSettings', parameters('name')))]",
       "properties": {
         "copy": [
@@ -792,7 +932,7 @@
       },
       "type": "Microsoft.Authorization/roleAssignments",
       "apiVersion": "2022-04-01",
-      "scope": "[format('Microsoft.Network/virtualNetworks/{0}', parameters('name'))]",
+      "scope": "[resourceId('Microsoft.Network/virtualNetworks', parameters('name'))]",
       "name": "[coalesce(tryGet(coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()], 'name'), guid(resourceId('Microsoft.Network/virtualNetworks', parameters('name')), coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()].principalId, coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()].roleDefinitionId))]",
       "properties": {
         "roleDefinitionId": "[coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()].roleDefinitionId]",
@@ -874,6 +1014,12 @@
           "sharingScope": {
             "value": "[tryGet(coalesce(parameters('subnets'), createArray())[copyIndex()], 'sharingScope')]"
           },
+          "ipAllocations": {
+            "value": "[tryGet(coalesce(parameters('subnets'), createArray())[copyIndex()], 'ipAllocations')]"
+          },
+          "serviceGatewayResourceId": {
+            "value": "[tryGet(coalesce(parameters('subnets'), createArray())[copyIndex()], 'serviceGatewayResourceId')]"
+          },
           "enableTelemetry": {
             "value": "[variables('enableReferencedModulesTelemetry')]"
           }
@@ -885,8 +1031,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.39.26.7824",
-              "templateHash": "11087937906182478872"
+              "version": "0.40.2.10011",
+              "templateHash": "1719671825212455656"
             },
             "name": "Virtual Network Subnets",
             "description": "This module deploys a Virtual Network Subnet."
@@ -963,7 +1109,7 @@
               "metadata": {
                 "description": "An AVM-aligned type for a role assignment.",
                 "__bicep_imported_from!": {
-                  "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.2.1"
+                  "sourceTemplate": "br:mcr.microsoft.com/bicep/avm/utl/types/avm-common-types:0.6.1"
                 }
               }
             }
@@ -990,13 +1136,13 @@
             },
             "ipamPoolPrefixAllocations": {
               "type": "array",
-              "items": {
-                "type": "object"
-              },
-              "nullable": true,
               "metadata": {
+                "__bicep_resource_derived_type!": {
+                  "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/ipamPoolPrefixAllocations"
+                },
                 "description": "Conditional. The address space for the subnet, deployed from IPAM Pool. Required if `addressPrefixes` and `addressPrefix` is empty."
-              }
+              },
+              "nullable": true
             },
             "networkSecurityGroupResourceId": {
               "type": "string",
@@ -1090,16 +1236,38 @@
             },
             "applicationGatewayIPConfigurations": {
               "type": "array",
-              "defaultValue": [],
               "metadata": {
+                "__bicep_resource_derived_type!": {
+                  "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/applicationGatewayIPConfigurations"
+                },
                 "description": "Optional. Application gateway IP configurations of virtual network resource."
-              }
+              },
+              "defaultValue": []
             },
             "serviceEndpointPolicies": {
               "type": "array",
-              "defaultValue": [],
               "metadata": {
+                "__bicep_resource_derived_type!": {
+                  "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/serviceEndpointPolicies"
+                },
                 "description": "Optional. An array of service endpoint policies."
+              },
+              "defaultValue": []
+            },
+            "ipAllocations": {
+              "type": "array",
+              "metadata": {
+                "__bicep_resource_derived_type!": {
+                  "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/ipAllocations"
+                },
+                "description": "Optional. Array of IpAllocation which reference this subnet."
+              }
+            },
+            "serviceGatewayResourceId": {
+              "type": "string",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. The resource ID of the service gateway associated with the subnet."
               }
             },
             "roleAssignments": {
@@ -1161,12 +1329,12 @@
             "virtualNetwork": {
               "existing": true,
               "type": "Microsoft.Network/virtualNetworks",
-              "apiVersion": "2024-01-01",
+              "apiVersion": "2025-05-01",
               "name": "[parameters('virtualNetworkName')]"
             },
             "subnet": {
               "type": "Microsoft.Network/virtualNetworks/subnets",
-              "apiVersion": "2024-05-01",
+              "apiVersion": "2025-05-01",
               "name": "[format('{0}/{1}', parameters('virtualNetworkName'), parameters('name'))]",
               "properties": {
                 "copy": [
@@ -1190,7 +1358,9 @@
                 "applicationGatewayIPConfigurations": "[parameters('applicationGatewayIPConfigurations')]",
                 "serviceEndpointPolicies": "[parameters('serviceEndpointPolicies')]",
                 "defaultOutboundAccess": "[parameters('defaultOutboundAccess')]",
-                "sharingScope": "[parameters('sharingScope')]"
+                "sharingScope": "[parameters('sharingScope')]",
+                "ipAllocations": "[parameters('ipAllocations')]",
+                "serviceGateway": "[if(not(empty(parameters('serviceGatewayResourceId'))), createObject('id', parameters('serviceGatewayResourceId')), null())]"
               }
             },
             "subnet_roleAssignments": {
@@ -1200,7 +1370,7 @@
               },
               "type": "Microsoft.Authorization/roleAssignments",
               "apiVersion": "2022-04-01",
-              "scope": "[format('Microsoft.Network/virtualNetworks/{0}/subnets/{1}', parameters('virtualNetworkName'), parameters('name'))]",
+              "scope": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('name'))]",
               "name": "[coalesce(tryGet(coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()], 'name'), guid(resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('name')), coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()].principalId, coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()].roleDefinitionId))]",
               "properties": {
                 "roleDefinitionId": "[coalesce(variables('formattedRoleAssignments'), createArray())[copyIndex()].roleDefinitionId]",
@@ -1248,6 +1418,10 @@
             "addressPrefixes": {
               "type": "array",
               "metadata": {
+                "__bicep_resource_derived_type!": {
+                  "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/addressPrefixes",
+                  "output": true
+                },
                 "description": "List of address prefixes for the subnet."
               },
               "value": "[coalesce(tryGet(reference('subnet'), 'addressPrefixes'), createArray())]"
@@ -1255,6 +1429,10 @@
             "ipamPoolPrefixAllocations": {
               "type": "array",
               "metadata": {
+                "__bicep_resource_derived_type!": {
+                  "source": "Microsoft.Network/virtualNetworks/subnets@2025-05-01#properties/properties/properties/ipamPoolPrefixAllocations",
+                  "output": true
+                },
                 "description": "The IPAM pool prefix allocations for the subnet."
               },
               "value": "[coalesce(tryGet(reference('subnet'), 'ipamPoolPrefixAllocations'), createArray())]"
@@ -1301,18 +1479,37 @@
           "doNotVerifyRemoteGateways": {
             "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'doNotVerifyRemoteGateways')]"
           },
+          "enableOnlyIPv6Peering": {
+            "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'enableOnlyIPv6Peering')]"
+          },
+          "localAddressSpace": {
+            "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'localAddressSpace')]"
+          },
+          "localSubnetNames": {
+            "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'localSubnetNames')]"
+          },
+          "peerCompleteVnets": {
+            "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'peerCompleteVnets')]"
+          },
+          "remoteAddressSpace": {
+            "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'remoteAddressSpace')]"
+          },
+          "remoteSubnetNames": {
+            "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'remoteSubnetNames')]"
+          },
           "useRemoteGateways": {
             "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'useRemoteGateways')]"
           }
         },
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "languageVersion": "2.0",
           "contentVersion": "1.0.0.0",
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.39.26.7824",
-              "templateHash": "4173704498931603856"
+              "version": "0.40.2.10011",
+              "templateHash": "15613451553229826613"
             },
             "name": "Virtual Network Peerings",
             "description": "This module deploys a Virtual Network Peering."
@@ -1371,25 +1568,91 @@
               "metadata": {
                 "description": "Optional. If remote gateways can be used on this virtual network. If the flag is set to true, and allowGatewayTransit on remote peering is also true, virtual network will use gateways of remote virtual network for transit. Only one peering can have this flag set to true. This flag cannot be set if virtual network already has a gateway. Default is false."
               }
+            },
+            "enableOnlyIPv6Peering": {
+              "type": "bool",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. Whether only Ipv6 address space is peered for subnet peering."
+              }
+            },
+            "localSubnetNames": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. List of local subnet names that are subnet peered with remote virtual network."
+              }
+            },
+            "peerCompleteVnets": {
+              "type": "bool",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. Whether complete virtual network address space is peered."
+              }
+            },
+            "remoteSubnetNames": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. List of remote subnet names from remote virtual network that are subnet peered."
+              }
+            },
+            "localAddressSpace": {
+              "type": "object",
+              "metadata": {
+                "__bicep_resource_derived_type!": {
+                  "source": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01#properties/properties/properties/localAddressSpace"
+                },
+                "description": "Optional. The local address space of the local virtual network that is peered."
+              },
+              "nullable": true
+            },
+            "remoteAddressSpace": {
+              "type": "object",
+              "metadata": {
+                "__bicep_resource_derived_type!": {
+                  "source": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01#properties/properties/properties/remoteAddressSpace"
+                },
+                "description": "Optional. The reference to the address space peered with the remote virtual network."
+              },
+              "nullable": true
             }
           },
-          "resources": [
-            {
+          "resources": {
+            "virtualNetwork": {
+              "existing": true,
+              "type": "Microsoft.Network/virtualNetworks",
+              "apiVersion": "2025-05-01",
+              "name": "[parameters('localVnetName')]"
+            },
+            "virtualNetworkPeering": {
               "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-              "apiVersion": "2024-01-01",
+              "apiVersion": "2025-05-01",
               "name": "[format('{0}/{1}', parameters('localVnetName'), parameters('name'))]",
               "properties": {
                 "allowForwardedTraffic": "[parameters('allowForwardedTraffic')]",
                 "allowGatewayTransit": "[parameters('allowGatewayTransit')]",
                 "allowVirtualNetworkAccess": "[parameters('allowVirtualNetworkAccess')]",
                 "doNotVerifyRemoteGateways": "[parameters('doNotVerifyRemoteGateways')]",
+                "enableOnlyIPv6Peering": "[parameters('enableOnlyIPv6Peering')]",
+                "localAddressSpace": "[parameters('localAddressSpace')]",
+                "localSubnetNames": "[parameters('localSubnetNames')]",
+                "peerCompleteVnets": "[parameters('peerCompleteVnets')]",
+                "remoteAddressSpace": "[parameters('remoteAddressSpace')]",
+                "remoteSubnetNames": "[parameters('remoteSubnetNames')]",
                 "useRemoteGateways": "[parameters('useRemoteGateways')]",
                 "remoteVirtualNetwork": {
                   "id": "[parameters('remoteVirtualNetworkResourceId')]"
                 }
               }
             }
-          ],
+          },
           "outputs": {
             "resourceGroupName": {
               "type": "string",
@@ -1458,18 +1721,37 @@
           "doNotVerifyRemoteGateways": {
             "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'remotePeeringDoNotVerifyRemoteGateways')]"
           },
+          "enableOnlyIPv6Peering": {
+            "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'remotePeeringEnableOnlyIPv6Peering')]"
+          },
+          "localAddressSpace": {
+            "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'remotePeeringLocalAddressSpace')]"
+          },
+          "localSubnetNames": {
+            "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'remotePeeringLocalSubnetNames')]"
+          },
+          "peerCompleteVnets": {
+            "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'remotePeeringPeerCompleteVnets')]"
+          },
+          "remoteAddressSpace": {
+            "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'remotePeeringRemoteAddressSpace')]"
+          },
+          "remoteSubnetNames": {
+            "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'remotePeeringRemoteSubnetNames')]"
+          },
           "useRemoteGateways": {
             "value": "[tryGet(coalesce(parameters('peerings'), createArray())[copyIndex()], 'remotePeeringUseRemoteGateways')]"
           }
         },
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "languageVersion": "2.0",
           "contentVersion": "1.0.0.0",
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.39.26.7824",
-              "templateHash": "4173704498931603856"
+              "version": "0.40.2.10011",
+              "templateHash": "15613451553229826613"
             },
             "name": "Virtual Network Peerings",
             "description": "This module deploys a Virtual Network Peering."
@@ -1528,25 +1810,91 @@
               "metadata": {
                 "description": "Optional. If remote gateways can be used on this virtual network. If the flag is set to true, and allowGatewayTransit on remote peering is also true, virtual network will use gateways of remote virtual network for transit. Only one peering can have this flag set to true. This flag cannot be set if virtual network already has a gateway. Default is false."
               }
+            },
+            "enableOnlyIPv6Peering": {
+              "type": "bool",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. Whether only Ipv6 address space is peered for subnet peering."
+              }
+            },
+            "localSubnetNames": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. List of local subnet names that are subnet peered with remote virtual network."
+              }
+            },
+            "peerCompleteVnets": {
+              "type": "bool",
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. Whether complete virtual network address space is peered."
+              }
+            },
+            "remoteSubnetNames": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "nullable": true,
+              "metadata": {
+                "description": "Optional. List of remote subnet names from remote virtual network that are subnet peered."
+              }
+            },
+            "localAddressSpace": {
+              "type": "object",
+              "metadata": {
+                "__bicep_resource_derived_type!": {
+                  "source": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01#properties/properties/properties/localAddressSpace"
+                },
+                "description": "Optional. The local address space of the local virtual network that is peered."
+              },
+              "nullable": true
+            },
+            "remoteAddressSpace": {
+              "type": "object",
+              "metadata": {
+                "__bicep_resource_derived_type!": {
+                  "source": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01#properties/properties/properties/remoteAddressSpace"
+                },
+                "description": "Optional. The reference to the address space peered with the remote virtual network."
+              },
+              "nullable": true
             }
           },
-          "resources": [
-            {
+          "resources": {
+            "virtualNetwork": {
+              "existing": true,
+              "type": "Microsoft.Network/virtualNetworks",
+              "apiVersion": "2025-05-01",
+              "name": "[parameters('localVnetName')]"
+            },
+            "virtualNetworkPeering": {
               "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-              "apiVersion": "2024-01-01",
+              "apiVersion": "2025-05-01",
               "name": "[format('{0}/{1}', parameters('localVnetName'), parameters('name'))]",
               "properties": {
                 "allowForwardedTraffic": "[parameters('allowForwardedTraffic')]",
                 "allowGatewayTransit": "[parameters('allowGatewayTransit')]",
                 "allowVirtualNetworkAccess": "[parameters('allowVirtualNetworkAccess')]",
                 "doNotVerifyRemoteGateways": "[parameters('doNotVerifyRemoteGateways')]",
+                "enableOnlyIPv6Peering": "[parameters('enableOnlyIPv6Peering')]",
+                "localAddressSpace": "[parameters('localAddressSpace')]",
+                "localSubnetNames": "[parameters('localSubnetNames')]",
+                "peerCompleteVnets": "[parameters('peerCompleteVnets')]",
+                "remoteAddressSpace": "[parameters('remoteAddressSpace')]",
+                "remoteSubnetNames": "[parameters('remoteSubnetNames')]",
                 "useRemoteGateways": "[parameters('useRemoteGateways')]",
                 "remoteVirtualNetwork": {
                   "id": "[parameters('remoteVirtualNetworkResourceId')]"
                 }
               }
             }
-          ],
+          },
           "outputs": {
             "resourceGroupName": {
               "type": "string",
@@ -1602,6 +1950,9 @@
     },
     "subnetNames": {
       "type": "array",
+      "items": {
+        "type": "string"
+      },
       "metadata": {
         "description": "The names of the deployed subnets."
       },
@@ -1612,6 +1963,9 @@
     },
     "subnetResourceIds": {
       "type": "array",
+      "items": {
+        "type": "string"
+      },
       "metadata": {
         "description": "The resource IDs of the deployed subnets."
       },
@@ -1625,7 +1979,7 @@
       "metadata": {
         "description": "The location the resource was deployed into."
       },
-      "value": "[reference('virtualNetwork', '2024-05-01', 'full').location]"
+      "value": "[reference('virtualNetwork', '2025-05-01', 'full').location]"
     }
   }
 }
