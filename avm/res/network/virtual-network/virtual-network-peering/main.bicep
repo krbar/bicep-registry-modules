@@ -25,11 +25,29 @@ param doNotVerifyRemoteGateways bool = true
 @description('Optional. If remote gateways can be used on this virtual network. If the flag is set to true, and allowGatewayTransit on remote peering is also true, virtual network will use gateways of remote virtual network for transit. Only one peering can have this flag set to true. This flag cannot be set if virtual network already has a gateway. Default is false.')
 param useRemoteGateways bool = false
 
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-11-01' existing = {
+@description('Optional. Whether only Ipv6 address space is peered for subnet peering.')
+param enableOnlyIPv6Peering bool?
+
+@description('Optional. List of local subnet names that are subnet peered with remote virtual network.')
+param localSubnetNames string[]?
+
+@description('Optional. Whether complete virtual network address space is peered.')
+param peerCompleteVnets bool?
+
+@description('Optional. List of remote subnet names from remote virtual network that are subnet peered.')
+param remoteSubnetNames string[]?
+
+@description('Optional. The local address space of the local virtual network that is peered.')
+param localAddressSpace resourceInput<'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01'>.properties.localAddressSpace?
+
+@description('Optional. The reference to the address space peered with the remote virtual network.')
+param remoteAddressSpace resourceInput<'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01'>.properties.remoteAddressSpace?
+
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2025-05-01' existing = {
   name: localVnetName
 }
 
-resource virtualNetworkPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2024-01-01' = {
+resource virtualNetworkPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2025-05-01' = {
   name: name
   parent: virtualNetwork
   properties: {
@@ -37,6 +55,12 @@ resource virtualNetworkPeering 'Microsoft.Network/virtualNetworks/virtualNetwork
     allowGatewayTransit: allowGatewayTransit
     allowVirtualNetworkAccess: allowVirtualNetworkAccess
     doNotVerifyRemoteGateways: doNotVerifyRemoteGateways
+    enableOnlyIPv6Peering: enableOnlyIPv6Peering
+    localAddressSpace: localAddressSpace
+    localSubnetNames: localSubnetNames
+    peerCompleteVnets: peerCompleteVnets
+    remoteAddressSpace: remoteAddressSpace
+    remoteSubnetNames: remoteSubnetNames
     useRemoteGateways: useRemoteGateways
     remoteVirtualNetwork: {
       id: remoteVirtualNetworkResourceId
