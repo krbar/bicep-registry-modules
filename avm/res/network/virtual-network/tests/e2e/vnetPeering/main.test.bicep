@@ -76,9 +76,13 @@ module testDeployment '../../../main.bicep' = [
           allowForwardedTraffic: true
           allowGatewayTransit: false
           allowVirtualNetworkAccess: true
+          enableOnlyIPv6Peering: false
+          peerCompleteVnets: true
           remotePeeringAllowForwardedTraffic: true
           remotePeeringAllowVirtualNetworkAccess: true
           remotePeeringEnabled: true
+          remotePeeringEnableOnlyIPv6Peering: false
+          remotePeeringPeerCompleteVnets: true
           remotePeeringName: 'customName'
           remoteVirtualNetworkResourceId: nestedDependencies.outputs.virtualNetworkResourceId
           useRemoteGateways: false
