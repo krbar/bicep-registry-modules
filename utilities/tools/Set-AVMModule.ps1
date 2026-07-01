@@ -211,6 +211,27 @@ function Set-AVMModule {
         # load cross-references
         $crossReferencedModuleList = Get-CrossReferencedModuleList -ForceCacheRefresh:$ForceCacheRefresh
 
+        # The list above may be served from a shared cache that can be up to 1 day old and therefore hold outdated
+        # references for modules whose dependencies changed since the cache was last refreshed. To ensure the generated
+        # READMEs match the references validated on the build agent (which always computes fresh data), refresh the
+        # cross-references for the specific modules that are being (re)generated. Each module folder is only scanned
+        # once, as a parent-module scan already includes its child modules.
+        $refreshedModuleFolders = [System.Collections.Generic.List[string]]@()
+        foreach ($relevantTemplatePath in ($relevantTemplatePaths | Sort-Object -Culture 'en-US')) {
+            $moduleFolderPath = Split-Path $relevantTemplatePath -Parent
+
+            # Skip if a parent module folder was already scanned (its scan already covers this child module)
+            if ($refreshedModuleFolders | Where-Object { $moduleFolderPath -eq $_ -or $moduleFolderPath.StartsWith($_ + [System.IO.Path]::DirectorySeparatorChar) }) {
+                continue
+            }
+
+            $freshReferences = Get-CrossReferencedModuleList -PathFilter $moduleFolderPath
+            foreach ($moduleIdentifier in $freshReferences.Keys) {
+                $crossReferencedModuleList[$moduleIdentifier] = $freshReferences[$moduleIdentifier]
+            }
+            $refreshedModuleFolders.Add($moduleFolderPath)
+        }
+
         # load AVM references (done to reduce WebRequests to GitHub repository)
         # Telemetry
         $telemetryUrl = 'https://aka.ms/avm/static/telemetry'
